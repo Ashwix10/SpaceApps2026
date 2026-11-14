@@ -1,3 +1,11 @@
+# Current milestone: dashboard controls and guided demo
+
+Added independent current/new plan editors, copy/reset actions, risk-score differences, four tissue comparison charts with uncertainty envelopes and day/landing cursors, timeline playback at 1x/4x/16x, audience selection, and a six-step guided demo. Manual interaction stops the demo; changed inputs invalidate old explanations. Destination assumptions remain visibly disclosed.
+
+Verification used the TypeScript/production build and focused browser checks. Editable comparison/copy, four-chart rendering and the guided demo's completion state were checked. The mouse-down handoff issue was corrected by cancelling in the bubbling event phase after the control event; a focused follow-up verified 16x playback and first-click manual interruption. No broad regression suite was rerun.
+
+Earlier milestone records follow.
+
 # Current milestone: interactive body visualization
 
 Added a local Three.js body with nine selectable regions, health-color/thickness animation, injury pulse, orbit/zoom, two-plan comparison, legend, keyboard-accessible region controls and a 2D fallback. The sandbox uses the actual generated forecast fixture. No remote models, fonts or textures are required.

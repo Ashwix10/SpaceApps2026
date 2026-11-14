@@ -1,13 +1,11 @@
-# AstroTwin dashboard skeleton
+# AstroTwin dashboard
 
-From this folder: `npm install`, then `npm run dev`. Run the API from the repo root in another terminal first. API mode is the default. Connection errors stay visible; mock mode is an explicit switch.
+The React interface runs in the Electron desktop app or the optional Vite browser workflow. From the repo root, `npm start` builds and opens the app. For fast browser iteration, start the API and run `npm --prefix web run dev`.
 
-The initial screen exercises all seven API routes. Flat curves and identical comparison results are expected while the stub model is installed; these are not science predictions.
+The dashboard includes crew/mission/injury controls; independently editable current and alternative countermeasure plans; 3D/2D region selection; risk changes; four tissue charts with illustrative uncertainty envelopes; shared timeline and 1x/4x/16x playback; crew/surgeon explanation audiences; and a six-stage guided demo that stops on manual interaction.
 
-Person 3 replaces `src/body/BodyTwin.tsx`, preserving the props in `src/types.ts`. Open `http://localhost:5173/?sandbox=body` to work independently. Shared design tokens and `healthColor` live in `src/theme.ts`.
+All inputs preserve the shared contract. Mock mode is explicit, and parameter-validation limits remain visible. AI-provider integration and scientific calibration remain separate workstreams.
 
-This is the initial integration frontend. The full dashboard, real 3D rendering, uncertainty display, editable alternative plan and playback remain the respective owners' next steps.
+`src/body/` holds the local 3D/2D components. `?sandbox=body` opens the body sandbox. Shared types and colors live in `src/types.ts` and `src/theme.ts`.
 
-Build: `npm run build`. Configure `.env.local` using `.env.example` when needed. `VITE_API_URL` must include `/api`, for example `https://your-api.example/api`.
-
-After the first successful install, commit the generated `package-lock.json`. CI uses `npm ci` when the lockfile exists and `npm install` until then.
+Build from this folder with `npm run build`; desktop `npm run build:web` forces same-origin /api and mocks off. Dependencies are locked by package-lock.json.

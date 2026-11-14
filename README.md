@@ -51,6 +51,12 @@ A manual GitHub Actions workflow, **Build Windows desktop installer**, runs test
 
 Before distributing, install on a second clean Windows machine, disconnect internet, run the demo, close/reopen and check process cleanup. See the complete acceptance list in the plan. An unsigned prototype may trigger Windows trust prompts.
 
+## Dashboard controls
+
+Enable **Compare plans**, then select **Current plan** or **New plan** to edit their controls independently. **Copy current plan** starts an identical alternative; **Reset plans** restores the demo defaults. Four charts show both forecasts and their illustrative uncertainty ranges, with a shared day cursor and landing marker.
+
+Use **Play/Pause** and **1x/4x/16x** to advance the timeline. **Run demo** presents six stages from baseline through injury, comparison, recovery and the Mars scenario. Any manual interaction stops the guided demo. The destination remains a scenario label rather than a new gravity model.
+
 ## Checks
 
 ```cmd
