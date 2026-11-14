@@ -1,9 +1,0 @@
-pyproject.toml
-astrotwin_model/__init__.py
-astrotwin_model/schemas.py
-astrotwin_model.egg-info/PKG-INFO
-astrotwin_model.egg-info/SOURCES.txt
-astrotwin_model.egg-info/dependency_links.txt
-astrotwin_model.egg-info/requires.txt
-astrotwin_model.egg-info/top_level.txt
-tests/test_stub.py
