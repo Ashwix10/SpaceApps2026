@@ -15,7 +15,7 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -e model -e explain -r api/requirements.txt
-      - run: pytest model api
+      - run: pytest model api explain
       - name: Live API smoke test
         run: |
           python -m uvicorn api.main:app --host 127.0.0.1 --port 8000 &

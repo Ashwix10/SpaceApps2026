@@ -20,7 +20,7 @@ try {
             if ($LASTEXITCODE -ne 0) { throw 'Web dependency installation failed.' }
         } finally { Pop-Location }
     }
-    & $pythonPath -m pytest model api
+    & $pythonPath -m pytest model api explain
     if ($LASTEXITCODE -ne 0) { throw 'Python tests failed.' }
     Push-Location web
     try {

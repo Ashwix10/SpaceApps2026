@@ -18,7 +18,7 @@ The first command after cd installs Electron and the desktop build tools. Later 
 
 If downloads are blocked, run npm install from a normal terminal with network access. Root package-lock.json is generated on the first successful install; commit it and use npm ci thereafter. web/package-lock.json is already present.
 
-The current model and body are still integration placeholders. Flat curves and identical comparison outcomes are expected until their owners implement the real features.
+The forecast engine now implements loss, injury, countermeasures and recovery. Its parameters are still unverified development estimates, clearly labeled in the UI. The body remains a region overview pending 3D implementation. All workstreams are now implemented together in this workspace.
 
 ## Setup on another developer's Windows computer
 
@@ -54,14 +54,14 @@ Before distributing, install on a second clean Windows machine, disconnect inter
 ## Checks
 
 ```cmd
-.venv\Scripts\python.exe -m pytest model api
+.venv\Scripts\python.exe -m pytest model api explain
 npm --prefix web test
 npm run build:web
 npm run test:desktop
 npm run smoke:desktop
 ```
 
-Add explain/ to pytest when its owner adds tests. The desktop smoke test launches the real local host and checks UI assets, session authentication, all seven API routes, offline template output and shutdown. It does not launch Electron or certify the installer.
+The desktop smoke test launches the real local host and checks UI assets, session authentication, all seven API routes, offline template output and shutdown. It does not launch Electron or certify the installer.
 
 To check the backend copied into the packaged app, in CMD:
 

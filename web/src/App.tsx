@@ -63,7 +63,7 @@ export function App() {
     <header><div><span className="eyebrow">ASTROTWIN / MISSION HEALTH</span><h1>Your crew. Their next horizon.</h1></div>
       <label className="mode"><input type="checkbox" checked={mocks} onChange={e => setMocks(e.target.checked)} /> Mock mode</label></header>
     <div className="notice"><span className="dot" /> {mocks ? 'LOCAL MOCKS' : health ? 'API CONNECTED' : 'API DISCONNECTED'} · {health?.model_version ?? 'Waiting for server'}
-      <span>Integration skeleton · Flat forecasts are placeholders · Research prototype</span></div>
+      <span>Development parameters · Not clinically validated</span></div>
     {error && <div role="alert" className="error">{error} <button onClick={() => setRetry(x => x + 1)}>Retry connection</button></div>}
     {busy && <p role="status">Loading forecast…</p>}
     {input && <>
@@ -91,7 +91,7 @@ export function App() {
         ] as const).map(([key, label, min, max, step]) => <label key={key}>{label}<strong>{input.countermeasures[key]}</strong><input type="range" min={min} max={max} step={step} value={input.countermeasures[key]} onChange={e => setInput({ ...input, countermeasures: { ...input.countermeasures, [key]: Number(e.target.value) } })} /></label>)}
         <label className="check"><input type="checkbox" checked={input.countermeasures.bisphosphonate} onChange={e => setInput({ ...input, countermeasures: { ...input.countermeasures, bisphosphonate: e.target.checked } })} /> Bone medication</label>
         <label className="check"><input type="checkbox" checked={compare} onChange={e => setCompare(e.target.checked)} /> Compare with demo alternative</label>
-        {compare && <small>Alternative: 90 min resistance, 45 min aerobic, 1.6 g/kg protein, 100% calories, medication on. Flat stubs produce identical results.</small>}
+        {compare && <small>Alternative: 90 min resistance, 45 min aerobic, 1.6 g/kg protein, 100% calories, medication on. Compare the projected trade-offs; better bone retention may come with lower aerobic fitness.</small>}
         <h2>Mission risk</h2>{forecast && Object.entries(forecast.risks).map(([key, risk]) => <div className={`risk ${risk.level}`} key={key}><strong>{key.replaceAll('_', ' ')} · {risk.score}/100</strong><small>{risk.reason}</small></div>)}
       </aside></div>
       {forecast && <section className="panel timeline"><div className="section-title"><h2>Mission timeline</h2><strong>Day {day} / {forecast.days.length - 1}</strong></div>
@@ -106,6 +106,6 @@ export function App() {
         {note && <p role="status">{note}</p>}
       </section>}
     </>}
-    <footer>AstroTwin · Integration skeleton · Not for clinical decisions · <a href="?sandbox=body">Body developer sandbox</a></footer>
+    <footer>AstroTwin · Development simulation · Not for clinical decisions · <a href="?sandbox=body">Body developer sandbox</a></footer>
   </main>;
 }

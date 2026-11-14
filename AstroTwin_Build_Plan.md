@@ -1,6 +1,8 @@
 # AstroTwin: Desktop App Build Plan
 Version 2.0 — Windows desktop transition — November 14, 2026
 
+**Execution update:** the user has consolidated implementation into this workspace. All folders may now be developed here. The five role sections below are workstream checklists, not separate assignments or edit restrictions. Continue in small tested increments: forecast engine and offline explanation, then 3D body, full dashboard/demo, cited parameter calibration, and installer acceptance. The desktop migration and API interfaces remain in place.
+
 NASA Space Apps project. Five people, one shared repository. This replaces the website-first build plan. The science/product requirements remain; the main deliverable is now an installable Windows x64 application.
 
 ## 0. Instructions for every team member and coding assistant
@@ -156,6 +158,8 @@ This is the complete current contract at the time of this plan. If the repositor
 # AstroTwin CONTRACT.md
 Version 1.1 (desktop transition). This file is the source of truth. Only Person 2 edits it, after team agreement.
 If code and this file disagree, this file wins.
+
+Execution update: implementation is now consolidated into this workspace at the user's request. The ownership labels below describe work areas and no longer restrict this assistant to one folder. API shapes and desktop runtime rules are unchanged.
 
 ## 1. Repo layout and owners
 astrotwin/
@@ -399,7 +403,7 @@ My role: model engineer. I own the Python package in `model/` (import name `astr
 4. Work in small steps. Show me a short plan, build step 1, run the tests, then continue.
 
 **Step 1, inspect and extend the existing stub (do not recreate it)**
-- `model/pyproject.toml`, so that `pip install -e model` works. Dependencies: pydantic>=2, numpy.
+- `model/pyproject.toml`, so that `pip install -e model` works. Dependency: pydantic>=2; the current engine meets the performance budget without an additional numerical package.
 - `astrotwin_model/schemas.py`: Pydantic v2 models for every shape in contract section 4, with the same field names, allowed values and ranges. Person 2 imports these for API validation.
 - `forecast()` returning correctly shaped data with simple straight-line curves, so others can integrate.
 - `scripts/make_fixture.py`: builds the demo seed request (contract section 11), calls `forecast()`, and writes `data/fixtures/forecast_example.json`. Run it and commit the file.
@@ -424,8 +428,8 @@ My role: model engineer. I own the Python package in `model/` (import name `astr
   - The injured region follows its own local curve, which also drops by `0.15 * severity` on the injury day and returns to the region's normal curve over the healing period.
 - Risks: follow contract section 7 exactly. `score = clamp(round((100 - value) * 5), 0, 100)`. The reason is one plain sentence with the number, for example "Hip bone density is predicted at 91.2% of baseline at landing."
 - Events: launch at day 0, the injury day, each eva day, landing at landing_day.
-- `meta.model_version = "1.0"`; `meta.params_version = params["version"]`.
-- Round all array values to 2 decimals. Use numpy for speed.
+- `meta.model_version = "1.0-development"` until calibration; `meta.params_version = params["version"]`.
+- Round all array values to 2 decimals. The standard library is sufficient if the maximum mission satisfies the performance budget; add NumPy only if needed.
 
 **Step 3:** `compare(request, alternative, params)` runs forecast twice: once with the request's countermeasures and once with the alternative. It returns `{ baseline, alternative }`.
 

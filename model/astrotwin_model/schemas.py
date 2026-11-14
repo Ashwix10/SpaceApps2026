@@ -47,6 +47,12 @@ class Mission(_Strict):
     duration_days: int = Field(ge=7, le=900)
     eva_days: List[int] = Field(default_factory=list)
 
+    @model_validator(mode="after")
+    def _check_eva_days(self) -> "Mission":
+        if any(day < 0 or day > self.duration_days for day in self.eva_days):
+            raise ValueError("Spacewalk days must be between launch and landing")
+        return self
+
 
 class Injury(_Strict):
     type: InjuryType
@@ -77,6 +83,12 @@ class ForecastRequest(_Strict):
     mission: Mission
     injury: Optional[Injury] = None
     countermeasures: Countermeasures
+
+    @model_validator(mode="after")
+    def _check_injury_day(self) -> "ForecastRequest":
+        if self.injury and self.injury.day > self.mission.duration_days:
+            raise ValueError("Injury day must be between launch and landing")
+        return self
 
 
 # ---- Outputs --------------------------------------------------------------

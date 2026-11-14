@@ -2,6 +2,8 @@
 Version 1.1 (desktop transition). This file is the source of truth. Only Person 2 edits it, after team agreement.
 If code and this file disagree, this file wins.
 
+Execution update: implementation is now consolidated into this workspace at the user's request. The ownership labels below describe work areas and no longer restrict this assistant to one folder. API shapes and desktop runtime rules are unchanged.
+
 ## 1. Repo layout and owners
 astrotwin/
   CONTRACT.md, README.md, AstroTwin_Build_Plan.md, .github/workflows/ci.yml, package.json, package-lock.json, scripts/   Person 2

@@ -7,7 +7,7 @@ export function BodyTwin({ regions, day, compareRegions, injuredRegion, selected
   return <div className="body-placeholder" style={{ minHeight: height }}>
     <span className="eyebrow">BODY TWIN · INTEGRATION VIEW</span>
     <h2>Nine regions. One shared forecast.</h2>
-    <p>3D body placeholder · Person 3 connects here.</p>
+    <p>Region overview · 3D visualization is the next workstream.</p>
     <div className="regions">{ids.map(id => <button key={id} aria-pressed={selectedRegion === id}
       onClick={() => onRegionSelect?.(selectedRegion === id ? null : id)}
       style={{ borderColor: healthColor(regions[id][day] ?? 1) }}>
