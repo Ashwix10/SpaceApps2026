@@ -18,7 +18,7 @@ The first command after cd installs Electron and the desktop build tools. Later 
 
 If downloads are blocked, run npm install from a normal terminal with network access. Root package-lock.json is generated on the first successful install; commit it and use npm ci thereafter. web/package-lock.json is already present.
 
-The forecast engine now implements loss, injury, countermeasures and recovery. Its parameters are still unverified development estimates, clearly labeled in the UI. The body remains a region overview pending 3D implementation. All workstreams are now implemented together in this workspace.
+The forecast engine now implements loss, injury, countermeasures and recovery. Its parameters are still unverified development estimates, clearly labeled in the UI. The body now renders nine interactive 3D regions with health colors, injury markers, comparison and a selectable 2D fallback. All workstreams are now implemented together in this workspace.
 
 ## Setup on another developer's Windows computer
 

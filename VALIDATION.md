@@ -1,3 +1,11 @@
+# Current milestone: interactive body visualization
+
+Added a local Three.js body with nine selectable regions, health-color/thickness animation, injury pulse, orbit/zoom, two-plan comparison, legend, keyboard-accessible region controls and a 2D fallback. The sandbox uses the actual generated forecast fixture. No remote models, fonts or textures are required.
+
+Verification for this change was limited to one TypeScript/production build and one focused browser visual check covering canvas rendering, region selection, comparison and the two-body 2D fallback. No broad test rerun was performed. The screenshot was inspected; this was a browser check of the local desktop host, not an installed Electron release check.
+
+Earlier milestone records follow.
+
 # Current milestone: development forecast engine
 
 The flat Python stub has been replaced with loss, recovery, injury and countermeasure calculations. The default demo now projects hip bone at 95.94% and aerobic fitness at 84.12% at landing; its alternative projects 98.63% and 80.56%, illustrating a real trade-off within these development assumptions. These figures are simulation outputs, not evidence of scientific accuracy.

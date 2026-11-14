@@ -83,7 +83,7 @@ export function App() {
           {input.injury.type !== 'lower_back_strain' && <label>Side<select value={input.injury.side!} onChange={e => setInput({ ...input, injury: { ...input.injury!, side: e.target.value as 'left' | 'right' } })}><option value="left">Left</option><option value="right">Right</option></select></label>}
           <label>Injury day · {input.injury.day}<input type="range" min="0" max={input.mission.duration_days} value={input.injury.day} onChange={e => setInput({ ...input, injury: { ...input.injury!, day: Number(e.target.value) } })} /></label></>}
       </aside>
-      <section className="panel center">{forecast ? <BodyTwin regions={forecast.regions} day={day} compareRegions={comparison?.alternative.regions} injuredRegion={injuredRegion} selectedRegion={selected} onRegionSelect={setSelected} /> : <p>Waiting for the first forecast.</p>}</section>
+      <section className="panel center">{forecast ? <BodyTwin regions={forecast.regions} day={day} compareRegions={comparison?.alternative.regions} injuredRegion={input.injury && day >= input.injury.day ? injuredRegion : null} selectedRegion={selected} onRegionSelect={setSelected} /> : <p>Waiting for the first forecast.</p>}</section>
       <aside className="panel"><span className="eyebrow">02 / COUNTERMEASURES</span><h2>Daily plan</h2>
         {([
           ['resistance_min_per_day', 'Resistance · min', 0, 120, 5], ['aerobic_min_per_day', 'Aerobic · min', 0, 120, 5],
