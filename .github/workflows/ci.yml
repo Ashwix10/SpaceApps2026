@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main, model, api, body, web, data]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -e model -e explain -r api/requirements.txt
+      - run: pytest model api
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for web app
+        id: check
+        run: |
+          if [ -f web/package.json ]; then echo "exists=true" >> "$GITHUB_OUTPUT"; else echo "exists=false" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.exists == 'true'
+        with:
+          node-version: "20"
+      - name: Build web
+        if: steps.check.outputs.exists == 'true'
+        working-directory: web
+        run: |
+          npm ci
+          npm run build

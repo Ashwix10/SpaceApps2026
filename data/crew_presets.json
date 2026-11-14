@@ -1,0 +1,12 @@
+[
+  {
+    "id": "crew_maya",
+    "name": "Maya Okafor",
+    "age": 42,
+    "sex": "F",
+    "mass_kg": 64,
+    "fitness": "high",
+    "role": "Commander",
+    "baseline": { "hip_bmd_g_cm2": 1.02, "spine_bmd_g_cm2": 1.08, "leg_lean_mass_kg": 16.5, "vo2max_ml_kg_min": 44 }
+  }
+]
