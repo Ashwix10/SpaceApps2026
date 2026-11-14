@@ -1,0 +1,6 @@
+[
+  { "type": "ankle_sprain",      "label": "Ankle sprain",      "needs_side": true },
+  { "type": "wrist_fracture",    "label": "Wrist fracture",    "needs_side": true },
+  { "type": "lower_back_strain", "label": "Lower back strain", "needs_side": false },
+  { "type": "thigh_muscle_tear", "label": "Thigh muscle tear", "needs_side": true }
+]
