@@ -1,0 +1,46 @@
+name: Build Windows desktop installer
+on:
+  workflow_dispatch:
+
+jobs:
+  installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Create build environment
+        run: |
+          python -m venv .venv
+          .venv/Scripts/python.exe -m pip install -e model -e explain -r api/requirements.txt -r desktop/requirements-build.txt
+          if (Test-Path package-lock.json) { npm ci } else { npm install }
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm --prefix web ci
+      - name: Check source
+        run: |
+          .venv/Scripts/python.exe -m pytest model api
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm --prefix web test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run build:web
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run test:desktop
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          npm run smoke:desktop
+      - name: Build installer
+        run: npm run dist:win
+      - name: Test bundled backend from the packaged app
+        run: |
+          $env:ASTROTWIN_BACKEND_EXECUTABLE = Join-Path $PWD 'release/win-unpacked/resources/backend/astrotwin-backend.exe'
+          npm run smoke:desktop
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AstroTwin-Windows-x64
+          path: |
+            release/*Setup.exe
+            package-lock.json
+          if-no-files-found: error

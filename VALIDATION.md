@@ -1,30 +1,61 @@
-# Skeleton validation
+# Desktop transition validation
 
-Checked on November 14, 2026, in the local `default` checkout.
+November 14, 2026. Local integration branch: default. Plan 2.0 / contract 1.1.
 
-## Passed here
+## Passed in this transition
 
-- Existing model forecast and comparison shape tests, invoked directly using the installed Pydantic runtime.
-- Model forecasts for 7-, 180-, and 900-day missions: schema validation, continuous day indices, four series, uncertainty-band lengths and nine region arrays.
-- Request schemas reject a 5-day mission and an ankle sprain without a side.
-- Committed forecast fixture exactly matches the Python stub output.
-- Five frontend contract tests: boundary mission lengths, event ordering, independent responses and shared health-color thresholds. These ran using the existing local TypeScript compiler because npm installation was unavailable.
-- Python AST parsing, TypeScript/TSX syntax transpilation, PowerShell syntax parsing and Git whitespace checks.
+| Check | Result |
+| --- | --- |
+| Python model and standalone API tests | 14 passed on Python 3.12.14 |
+| Frontend contract tests | 5 passed |
+| Renderer TypeScript check and Vite production build | Passed; desktop build forces /api and mocks off |
+| Desktop process lifecycle tests | 4 passed |
+| Authenticated desktop-host smoke | All seven API routes, local UI, template explanation and shutdown passed |
+| Headless Chrome UI check against the desktop host | API mode, nine regions, day slider, comparison, explanation and body sandbox passed |
+| External renderer downloads in that browser check | None |
+| JavaScript page errors in that browser check | None |
+| Plan/contract consistency | Embedded contract matches CONTRACT.md exactly |
+| Model/API compatibility | JSON shapes and Python function signatures unchanged |
+| Python runner/PyInstaller spec/Node syntax | Passed |
 
-## Not yet verified
+Lifecycle tests cover unauthorized requests, correct session access, backend shutdown and port release, parent-pipe EOF after a simulated parent crash, missing executable and cancellation during startup. The browser check used a fresh isolated Chrome session; it was not an Electron-window test.
 
-Network restrictions prevented pip and npm from installing dependencies and prevented contact with GitHub. Therefore the full FastAPI tests, live HTTP smoke test, frontend type check/build, browser rendering and a clean dependency installation have **not** passed here. Syntax transpilation is not a TypeScript type check. Model timings do not verify HTTP latency.
+The existing Python tests still exercise a stub model. They do not establish scientific or clinical accuracy. The initial body is still a placeholder.
 
-`web/package-lock.json` must be generated and committed after the first successful `npm install`. CI uses `npm install` until that lockfile exists, then `npm ci`.
+## Remaining verification and download blockers
 
-## Complete the checks on a connected machine
+Root npm installation was attempted but the environment blocked access to registry.npmjs.org. PyInstaller installation was also attempted but its package index was unreachable. Therefore:
 
-From this checkout's repo root in PowerShell:
+- Electron itself has not launched in this environment.
+- Root package-lock.json has not yet been generated; generate and commit it after a successful npm install.
+- The PyInstaller backend build, electron-builder output, installer contents and clean-machine installation have not been run.
+- The Windows packaging GitHub Actions workflow is provided but has not executed or produced an artifact.
+- Nothing has been published or pushed to GitHub in this transition.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\check.ps1
+A renderer build, source process test or browser check must not be reported as installer acceptance.
+
+## Next commands on the user's connected terminal
+
+The earlier skeleton run already installed the venv and renderer dependencies. From the same repo root in CMD:
+
+```cmd
+npm install
+npm start
 ```
 
-This installs dependencies, runs the full Python and frontend contract tests, builds the frontend, and exercises all seven routes against a temporary live API. Then follow README's two-terminal development steps to check the page at http://localhost:5173 with Mock mode **off**. The API-connected badge and `0.0-stub` version should appear. Change mission length, scrub the timeline, enable the demo comparison and request an explanation. Flat curves and identical comparisons are expected for this integration stub.
+This should open the actual desktop window and start its own backend. Confirm the API-connected badge, close/reopen, and try a second launch.
 
-Only treat the skeleton as verified end to end after those checks pass. Push the local `default` branch when the results are satisfactory. No deployment has been performed.
+For an installer:
+
+```cmd
+.venv\Scripts\python.exe -m pip install -r desktop/requirements-build.txt
+npm run dist:win
+```
+
+Expected installer: release/AstroTwin-0.2.0-x64-Setup.exe. This is an expected build output, not a file already produced here. Follow the clean-machine acceptance checklist in AstroTwin_Build_Plan.md before distributing it.
+
+## Nonblocking messages
+
+The current environment reports a Starlette/httpx test-client deprecation warning, a pytest cache permission warning and a renderer bundle-size warning. All listed tests passed despite those messages. Packaging/GUI checks remain separate.
+
+Technical basis: Electron's documented isolated/sandboxed renderer, electron-builder v26 extraResources/NSIS configuration, and PyInstaller one-folder resource handling. Links are in the revised plan.

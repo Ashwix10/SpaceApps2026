@@ -29,6 +29,10 @@ try {
         & npm.cmd run build
         if ($LASTEXITCODE -ne 0) { throw 'Web build failed.' }
     } finally { Pop-Location }
+    & npm.cmd run test:desktop
+    if ($LASTEXITCODE -ne 0) { throw 'Desktop lifecycle tests failed.' }
+    & npm.cmd run smoke:desktop
+    if ($LASTEXITCODE -ne 0) { throw 'Desktop host smoke test failed.' }
     # Use a separate port so an existing development API is left alone.
     $server = Start-Process -FilePath $pythonPath -ArgumentList '-m','uvicorn','api.main:app','--host','127.0.0.1','--port','18000' -WorkingDirectory $repoRoot -WindowStyle Hidden -PassThru
     $ready = $false
@@ -43,7 +47,7 @@ try {
     if (-not $ready) { throw 'The smoke-test API did not become ready.' }
     & $pythonPath scripts/smoke.py http://127.0.0.1:18000
     if ($LASTEXITCODE -ne 0) { throw 'API smoke test failed.' }
-    Write-Host 'PASS: Python tests, frontend build, and live API smoke test.'
+    Write-Host 'PASS: Python/frontend tests, build, standalone API, and desktop host/lifecycle checks. Electron window and installer require separate launch tests.'
 } finally {
     if ($server -and -not $server.HasExited) { Stop-Process -Id $server.Id }
     Pop-Location

@@ -46,3 +46,21 @@ jobs:
           if [ -f package-lock.json ]; then npm ci; else npm install; fi
           npm test
           npm run build
+
+  desktop:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          python -m venv .venv
+          .venv/Scripts/python.exe -m pip install -e model -e explain -r api/requirements.txt
+      - run: npm --prefix web ci
+      - run: npm run build:web
+      - run: npm run test:desktop
+      - run: npm run smoke:desktop

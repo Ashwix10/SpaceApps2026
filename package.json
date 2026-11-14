@@ -1,0 +1,30 @@
+{
+  "name": "astrotwin-desktop",
+  "productName": "AstroTwin",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Astronaut health digital twin research prototype",
+  "author": "AstroTwin team",
+  "main": "desktop/main.cjs",
+  "engines": { "node": ">=20.19.0" },
+  "scripts": {
+    "build:web": "node desktop/build-web.cjs",
+    "prestart": "npm run build:web",
+    "start": "electron .",
+    "test:desktop": "node --test desktop/tests/*.test.cjs",
+    "smoke:desktop": "node desktop/smoke.cjs",
+    "build:backend": "node desktop/build-backend.cjs",
+    "package:win": "npm run build:web && npm run build:backend && electron-builder --win dir --x64",
+    "dist:win": "npm run build:web && npm run build:backend && electron-builder --win nsis --x64"
+  },
+  "devDependencies": { "electron": "latest", "electron-builder": "^26.0.12" },
+  "build": {
+    "appId": "org.astrotwin.desktop",
+    "productName": "AstroTwin",
+    "directories": { "output": "release" },
+    "files": ["desktop/*.cjs", "package.json"],
+    "extraResources": [{ "from": ".backend-dist/astrotwin-backend", "to": "backend", "filter": ["**/*"] }],
+    "win": { "target": ["nsis"], "artifactName": "AstroTwin-${version}-${arch}-Setup.${ext}" },
+    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "createStartMenuShortcut": true }
+  }
+}

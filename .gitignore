@@ -20,6 +20,10 @@ web/dist/
 npm-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+release/
+.backend-build/
+.backend-dist/
+.npm-cache/
 
 # Env and editors
 .env

@@ -1,95 +1,110 @@
-# AstroTwin
+# AstroTwin desktop
 
-A digital twin of an astronaut's body. It forecasts how bone, muscle and aerobic fitness decline in
-microgravity, how an in-flight injury changes that, and how exercise, nutrition and medication plans change
-the outcome, so a flight surgeon can compare plans before acting.
+An astronaut-health digital twin research prototype. The primary app is now **Windows x64 desktop**, using Electron, the existing React dashboard and the existing Python model/API. API shapes and BodyTwin props are unchanged.
 
-**[CONTRACT.md](CONTRACT.md) is the source of truth** for every shape, route, file path and name.
+Read [AstroTwin_Build_Plan.md](AstroTwin_Build_Plan.md) for the complete five-person plan, [CONTRACT.md](CONTRACT.md) for interfaces/runtime rules, and [VALIDATION.md](VALIDATION.md) for what has actually been checked. Shared integration branch: **default**.
 
-## Repo layout and owners
+## Start the app on this computer
 
-| Folder | Owner | What |
-|---|---|---|
-| `CONTRACT.md`, `README.md`, `.github/`, `api/` | Person 2 | Contract, CI, FastAPI server, deployment |
-| `model/` | Person 1 | `astrotwin_model`: forecast, compare, load_params, schemas |
-| `web/src/body/` | Person 3 | `BodyTwin` 3D body component |
-| `web/` | Person 4 | Vite + React app |
-| `explain/`, `data/`, `docs/` | Person 5 | Explanations, parameters, crew presets, docs |
+You already have the Python and web dependencies if the earlier skeleton check passed. From CMD:
 
-Never edit a folder you do not own. Ask the owner.
+```cmd
+cd /d "C:\Users\adity\OneDrive\Documents\SpaceApps\SpaceApps2026"
+npm install
+npm start
+```
 
-## Running locally
+The first command after cd installs Electron and the desktop build tools. Later launches need only **npm start**. It rebuilds the renderer, starts Electron, starts one private local backend and opens the dashboard once health is ready. Closing the app stops that backend. You do not start uvicorn or Vite separately for desktop use.
 
-Requires Python 3.11 and Node 20.19+ (or Node 22.12+). Run every command from the repo root.
+If downloads are blocked, run npm install from a normal terminal with network access. Root package-lock.json is generated on the first successful install; commit it and use npm ci thereafter. web/package-lock.json is already present.
 
-The shared integration branch for this checkout is `default`. The existing hour-0 skeleton from `main` has been merged into it. `CONTRACT.md` is unchanged; its references to `main` describe the original plan.
+The current model and body are still integration placeholders. Flat curves and identical comparison outcomes are expected until their owners implement the real features.
 
-### Windows quick check
+## Setup on another developer's Windows computer
 
-In PowerShell, from the repo root:
+Requires Python 3.11 and Node 20.19+ or supported newer LTS (Node 22 is used for desktop CI). Run from the repository root:
 
-```powershell
+```cmd
+py -3.11 -m venv .venv
+.venv\Scripts\python.exe -m pip install -e model -e explain -r api/requirements.txt
+npm install
+npm --prefix web ci
+npm start
+```
+
+Reuse an existing working .venv. If you intentionally use another Python environment, set ASTROTWIN_PYTHON to its absolute executable path.
+
+## Build a Windows installer
+
+On Windows x64, after developer setup:
+
+```cmd
+.venv\Scripts\python.exe -m pip install -r desktop/requirements-build.txt
+npm run dist:win
+```
+
+Expected output: **release/AstroTwin-0.2.0-x64-Setup.exe**. Version follows root package.json. For the unpacked app only, use npm run package:win; its executable is release/win-unpacked/AstroTwin.exe.
+
+The installer contains a PyInstaller one-folder Python backend, parameters/presets and the compiled UI. End users need no Python, Node, terminal or repository. Do not copy only the backend .exe out of its folder: it needs the accompanying libraries/resources.
+
+A manual GitHub Actions workflow, **Build Windows desktop installer**, runs tests, builds the installer and uploads an artifact when the changes are pushed. This creates a downloadable build artifact; it does not publicly publish a release. Signing and auto-updates are later work.
+
+Before distributing, install on a second clean Windows machine, disconnect internet, run the demo, close/reopen and check process cleanup. See the complete acceptance list in the plan. An unsigned prototype may trigger Windows trust prompts.
+
+## Checks
+
+```cmd
+.venv\Scripts\python.exe -m pytest model api
+npm --prefix web test
+npm run build:web
+npm run test:desktop
+npm run smoke:desktop
+```
+
+Add explain/ to pytest when its owner adds tests. The desktop smoke test launches the real local host and checks UI assets, session authentication, all seven API routes, offline template output and shutdown. It does not launch Electron or certify the installer.
+
+To check the backend copied into the packaged app, in CMD:
+
+```cmd
+set "ASTROTWIN_BACKEND_EXECUTABLE=%CD%\release\win-unpacked\resources\backend\astrotwin-backend.exe"
+npm run smoke:desktop
+set "ASTROTWIN_BACKEND_EXECUTABLE="
+```
+
+The existing Windows check script also checks the desktop host:
+
+```cmd
 powershell -ExecutionPolicy Bypass -File .\scripts\check.ps1
 ```
 
-This creates a virtual environment, installs dependencies, runs Python tests, builds the frontend, and starts a temporary API on port 18000 to check all seven routes. It stops that API afterward. Use `-SkipInstall` for subsequent checks when dependencies are already installed.
+## Ownership and implementation
 
-### Windows development
+| Owner | Files |
+| --- | --- |
+| Person 1 | model/ and generated forecast fixture |
+| Person 2 | api/, desktop/, scripts/, root config/plan/contract and CI |
+| Person 3 | web/src/body/ |
+| Person 4 | web/ except body |
+| Person 5 | data/, explain/, docs/ |
 
-After installation, run these in two terminals:
+desktop/main.cjs runs an isolated, sandboxed renderer with Node integration disabled. desktop/launcher.cjs owns one child process. desktop/backend.py binds an OS-assigned loopback port and serves the UI and /api from the same origin. A per-launch transport token stays in Electron's main process. A second app launch focuses the existing window.
 
-```powershell
-# Terminal 1, repo root
-.\.venv\Scripts\python.exe -m uvicorn api.main:app --reload --port 8000
+Core operation is offline. All required body/font/texture/decoder assets must be bundled locally. Template explanations must always work. ANTHROPIC_API_KEY and ANTHROPIC_MODEL, when used, are runtime configuration only; never bundle credentials. Persistent user records are outside this transition; do not write into installation resources.
 
-# Terminal 2, repo root
-cd web
-npm.cmd run dev
+## Optional browser workflow
+
+For fast frontend work, keep the original development mode in two terminals:
+
+```cmd
+.venv\Scripts\python.exe -m uvicorn api.main:app --reload --port 8000
 ```
 
-Open http://localhost:5173. API mode is the default. The top bar identifies the data source; select Mock mode explicitly to work without the backend. Model version `0.0-stub` returns flat lines at 100%, region health 1.0, and green risk scores. It verifies integration, not medical predictions.
-
-### macOS / Linux
-
-```bash
-# 1. Python packages (a virtual environment is recommended)
-python -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -e model -e explain -r api/requirements.txt
-
-# 2. API on http://localhost:8000  (OpenAPI docs at http://localhost:8000/docs)
-uvicorn api.main:app --reload --port 8000
-
-# 3. Web app on http://localhost:5173  (in a second terminal)
-cd web && npm install && npm run dev
+```cmd
+npm --prefix web run dev
 ```
 
-- Vite proxies `/api` to `http://localhost:8000`. In production, `VITE_API_URL` sets the API base URL.
-- `VITE_USE_MOCKS=true` makes the web app use `src/mocks` instead of the API.
-- `ASTROTWIN_DATA_DIR` overrides where the API reads `params.json`, `crew_presets.json` and `injuries.json`
-  (default: `data/`).
-- Regenerate the model fixture: `python model/scripts/make_fixture.py`
+Open http://localhost:5173; Vite proxies /api to the developer backend. The API docs remain http://localhost:8000/docs in this mode. Person 3's sandbox is ?sandbox=body.
 
-## Tests
+VITE_API_URL is for optional browser deployment. Desktop build:web forces same-origin /api and VITE_USE_MOCKS=false; a user can still select clearly labeled mock mode. Never substitute mocks silently on a failed forecast.
 
-```bash
-pytest model api                    # what CI runs
-cd web && npm install && npm run build
-```
-
-## Git workflow
-
-Branches: `model`, `api`, `body`, `web`, `data`, and personal branches such as `aditya`. Target `default` for this integration. Person 2 merges after CI is green. If the team returns to `main`, update the workflow documentation consistently.
-
-## API and deployment
-
-- Every contract route is implemented, using shared Pydantic schemas. `/api/explain` falls back to a template on explanation-package errors.
-- API smoke check against any running server: `python scripts/smoke.py http://localhost:8000` (or `bash scripts/smoke.sh`).
-- Container: `docker build -f api/Dockerfile -t astrotwin-api .`, then `docker run --rm -p 8000:8000 astrotwin-api`. Build context must be the repo root.
-- Render / Railway: use the Dockerfile, set `WEB_ORIGIN` to the exact deployed frontend origin. The API respects `PORT` (default 8000).
-- Vercel: build from the repo root with `cd web && npm install && npm run build`, output `web/dist`. Keep files outside the web directory available because mock data imports use `data/`. Set `VITE_API_URL=https://your-api.example/api` and `VITE_USE_MOCKS=false`.
-- After a successful npm install, commit `web/package-lock.json`; CI then switches automatically to `npm ci`.
-
-## What is still a placeholder
-
-The scientific model, cited parameter values, AI explanations and 3D body are intentionally replaceable stubs. The initial dashboard demonstrates the contract connection; Person 4 continues the full frontend and Person 3 supplies the body. No production deployment is included in this skeleton.
+The existing api/Dockerfile is retained for optional server development. Cloud hosting is no longer required for the desktop deliverable.

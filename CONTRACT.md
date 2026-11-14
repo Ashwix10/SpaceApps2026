@@ -1,10 +1,11 @@
 # AstroTwin CONTRACT.md
-Version 1.0. This file is the source of truth. Only Person 2 edits it, after team agreement.
+Version 1.1 (desktop transition). This file is the source of truth. Only Person 2 edits it, after team agreement.
 If code and this file disagree, this file wins.
 
 ## 1. Repo layout and owners
 astrotwin/
-  CONTRACT.md, README.md, .github/workflows/ci.yml        Person 2
+  CONTRACT.md, README.md, AstroTwin_Build_Plan.md, .github/workflows/ci.yml, package.json, package-lock.json, scripts/   Person 2
+  desktop/                                                  Person 2 (Electron shell, Python host, packaging and lifecycle tests)
   model/                                                    Person 1
     pyproject.toml
     astrotwin_model/__init__.py   exports forecast, compare, load_params
@@ -32,8 +33,19 @@ astrotwin/
 Never edit a folder you do not own. Ask the owner.
 
 ## 2. Running locally
-Python 3.11, Node 20.
+Primary deliverable: an installable Windows x64 desktop app using Electron, the React UI and a bundled Python service.
+Development baseline: Python 3.11, Node 20.19+ (or supported newer LTS). Keep the web developer workflow for UI work.
 Install: pip install -e model -e explain -r api/requirements.txt
+Desktop dependencies: npm install (repo root), then npm --prefix web ci.
+Desktop start: npm start (repo root). Builds the renderer, launches Electron, starts its local backend and opens the UI after health is ready.
+Desktop tests: npm run test:desktop and npm run smoke:desktop (after npm run build:web).
+Windows packaging: pip install -r desktop/requirements-build.txt, then npm run dist:win (repo root).
+Output: release/AstroTwin-0.2.0-x64-Setup.exe (version follows root package.json). End users need no Python or Node installation.
+The Python host serves the compiled renderer and /api on one dynamically allocated 127.0.0.1 port.
+The desktop renderer always uses /api on its own origin. VITE_API_URL is for optional browser deployment only.
+VITE_USE_MOCKS is false for desktop builds; choosing mocks must be explicit and visibly labeled.
+The desktop shell starts and stops the backend. Team members must not start a second backend for npm start.
+Optional browser development:
 API: uvicorn api.main:app --reload --port 8000   (run from repo root)
 Web: cd web && npm install && npm run dev   (port 5173)
 Vite proxies /api to http://localhost:8000. In production, VITE_API_URL sets the API base URL.
@@ -122,7 +134,7 @@ POST /api/forecast   ForecastRequest  -> ForecastResponse
 POST /api/compare    CompareRequest   -> CompareResponse
 POST /api/explain    ExplainRequest   -> ExplainResponse
 Errors: HTTP 422 with { detail: string }.
-CORS allows http://localhost:5173 and the deployed web URL.
+CORS allows http://localhost:5173, http://127.0.0.1:5173 and WEB_ORIGIN for optional browser development. Desktop requests are same-origin.
 /api/forecast must answer in under 300 ms for a 900-day mission.
 
 ## 6. Python interfaces
@@ -162,7 +174,7 @@ At or below "red" = red, at or below "yellow" = yellow, otherwise green.
 
 ## 8. Design tokens (web/src/theme.ts, owned by Person 4, used by Person 3)
 bg #0B0F1A, panel #121829, border #23304A, text #E6EDF7, muted #8A97AD, accent #4FD1FF
-healthy #3B82F6, warning #F59E0B, danger #EF4444. Font: Inter.
+healthy #3B82F6, warning #F59E0B, danger #EF4444. Font: bundled Inter if available, otherwise the local system sans-serif. No runtime font download.
 healthColor(h: number): string blends healthy at 1.0, warning at 0.85, danger at 0.75 and below.
 
 ## 9. BodyTwin component (web/src/body/index.ts, owned by Person 3)
@@ -191,5 +203,22 @@ countermeasures: the defaults
 alternative: { resistance_min_per_day: 90, aerobic_min_per_day: 45, protein_g_per_kg: 1.6, calorie_pct: 100, bisphosphonate: true }
 
 ## 12. Git
-Branches: model, api, body, web, data. Small pull requests into main; Person 2 merges.
-CI must pass: pytest model api, and npm run build in web.
+Integration branch: default. Branches: model, api, body, web, data and personal branches such as aditya. Small pull requests into default; Person 2 merges.
+CI must pass: pytest model api (plus explain tests when present), npm test and npm run build in web, and desktop lifecycle/smoke tests.
+
+## 13. Desktop runtime and packaging
+Owner: Person 2. No changes to the section 4 JSON shapes, the seven API routes, Python model/explain interfaces or BodyTwin props are required by desktop packaging.
+desktop/main.cjs owns the Electron window. Node integration is off, context isolation and sandboxing are on. No renderer filesystem or subprocess privileges.
+desktop/launcher.cjs starts exactly one backend child, waits for authenticated /api/health, and stops only its own child on exit. A second app launch focuses the first window.
+desktop/backend.py binds 127.0.0.1 on an OS-assigned free port, serves web/dist plus the existing API, and requires an unpredictable per-launch X-AstroTwin-Session header.
+The token is held in Electron's main process and inserted only into requests to the local app origin. It never enters the React API shapes, query string or saved data.
+The runtime header is desktop transport only; the standalone API and its smoke scripts keep their existing interface.
+Backend readiness announcement on stdout is a JSON line: {"event":"ready","port":<int>}. Electron still checks health before opening the page.
+Backend stdin accepts shutdown followed by newline. EOF stops the backend when its parent disappears. Startup failures are shown as app errors; no silent switch to mock data.
+Local UI/API requests are allowed; remote renderer content, popups, arbitrary navigation and device permissions are blocked. Any new remote assets require Person 2 review and offline fallback.
+PyInstaller one-folder build includes model/explain code, data/ and web/dist. electron-builder includes that folder in the installer; no .venv, repository checkout or developer path is required on the user's computer.
+App resources are read-only. Future user-created files belong under Electron's userData directory through an agreed interface, never in the install folder. Persistence is not implemented in this transition.
+Core forecasts, presets, body assets and template explanations work offline. AI explanations are optional; configure keys at runtime and never bundle secrets.
+Windows x64 is the first release target. macOS/Linux installers, signing, auto-updates and app-store distribution are later work.
+Package smoke check: set ASTROTWIN_BACKEND_EXECUTABLE to the frozen astrotwin-backend executable and run npm run smoke:desktop.
+Release acceptance: install on a clean Windows machine without Python/Node, open, run demo offline, close, reopen, and confirm no leftover backend or install-path writes. A successful source test alone is not installer acceptance.
