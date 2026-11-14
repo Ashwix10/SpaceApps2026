@@ -1,0 +1,261 @@
+PRD: AstroTwin — Astronaut Health Digital Twin
+Nov 14, 2026 · @Aditya
+Overview
+AstroTwin is a digital twin of each crew member's body. It predicts how bone, muscle and the heart weaken in microgravity, and how fast an injury will heal when there is no hospital nearby. A flight surgeon or the crew can test treatment and exercise plans on the twin before trying them on the person.
+Problem. In orbit, the body is already breaking down: astronauts lose bone and muscle every week without heavy exercise. An injury such as a sprained ankle or a fractured wrist adds to that loss and heals in an unusual environment. Today, ground teams judge recovery mostly from experience, crew check-ins and standard protocols. There is no tool that combines a person's baseline, the mission timeline and the injury into one forecast.
+Why now. Commercial stations, private missions and Artemis lunar flights will put many more people in space. These crews include older and less-trained flyers, and lunar or Mars crews face communication delays that make real-time help from the ground harder. Health monitoring has to become personal, predictive and partly self-serve for the crew.
+Goals and non-goals
+Goals
+Forecast each crew member's bone density, muscle mass and cardiovascular fitness, day by day, across a whole mission.
+Forecast recovery time for common in-flight injuries, adjusted for microgravity and the person's current condition.
+Let users compare countermeasure plans (exercise, nutrition, medication) on the twin and see the predicted difference.
+Flag rising risk early, before it shows up as a symptom or a failed fitness test.
+Scale from one crew of 4 to dozens of crews on commercial stations, the Moon and Mars.
+Non-goals
+Diagnosing injuries. AstroTwin forecasts recovery after a clinician or crew medical officer has identified the injury.
+Replacing the flight surgeon. Every recommendation is advice that a person approves.
+Being a certified medical device in the hackathon version. The model is a research prototype.
+Covering every condition. Version 1 covers bone, muscle and cardiovascular deconditioning plus a small set of musculoskeletal injuries.
+Target users
+The primary user is the flight surgeon on the ground. The crew medical officer in orbit is a close second, and becomes the main user on missions too far away for real-time contact.
+Persona
+Role
+What they need
+Where they use it
+Dr. Maya Chen
+Flight surgeon, mission control
+A recovery forecast, and a way to compare treatment plans before calling the crew
+Desktop dashboard
+Cmdr. Luis Ortega
+Crew medical officer on a station
+Simple daily guidance he can follow without waiting for the ground
+Tablet in orbit
+Priya Nair
+Health lead at a commercial station operator
+Risk view across many paying customers with mixed fitness
+Fleet dashboard
+Sam Okafor
+Private astronaut, age 61
+A clear picture of what his body will go through and what to do
+Personal view
+Dr. Elena Ruiz
+Space medicine researcher
+Mission-wide data to test and improve the models
+Data export and API
+
+User stories
+The core scenario is an injury mid-mission: an astronaut sprains an ankle on day 40 of a 180-day mission, and the team must decide how to keep them fit enough to return to Earth safely.
+As a flight surgeon, I enter the injury and its severity, and see the predicted recovery curve compared with a healthy baseline.
+As a flight surgeon, I test two plans, such as modified resistance exercise versus rest, and see which one keeps bone and muscle loss lower by landing day.
+As a crew medical officer, I get a daily plan and a short explanation, so I can act during a communication blackout.
+As a crew member, I see my own body status as a simple 3D view and know whether I am on track.
+As a station health lead, I see which customers are trending toward a risk threshold this week.
+As a mission planner, I check whether a crew member will be fit for a scheduled spacewalk or landing.
+As a researcher, I export forecasts and outcomes to compare with real data and improve the model.
+Features and requirements
+P0 features make up the hackathon demo. P1 features are stretch goals for the weekend, and P2 features belong to the roadmap.
+Priority
+Feature
+Requirements
+P0
+Crew profile and baseline
+Age, sex, body mass, preflight bone density and muscle strength, mission length and destination. Preset sample astronauts for the demo.
+P0
+Deconditioning forecast
+Daily curves for bone density (hip and spine), leg muscle mass and aerobic fitness from launch to landing, plus recovery after landing.
+P0
+Injury module
+Pick an injury (ankle sprain, wrist fracture, lower-back strain, muscle tear) and its severity. The model adds healing time and extra local loss from reduced use.
+P0
+Countermeasure simulator
+Sliders for resistance exercise, treadmill and cycle time, calorie and protein intake, and an optional bone medication. Shows the forecast before and after.
+P0
+3D body view
+A body model whose bones and muscles change color and thickness with the forecast. A timeline scrubber moves through the mission.
+P0
+Risk score and alerts
+A green, yellow or red score for fracture risk, fitness for a spacewalk and fitness for landing, with the reason shown.
+P1
+Simulated sensor feed
+Fake wearable data (heart rate, activity, sleep) that updates the twin over time, to show how real data would refine it.
+P1
+Communication-delay mode
+For Moon and Mars settings, the crew gets on-board guidance and the ground sees the same view with the delay marked.
+P1
+Plain-language explanations
+An AI assistant that explains each forecast and recommendation in simple words for the crew.
+P2
+Fleet dashboard
+Many crews and customers on one screen, sorted by risk, for commercial station operators.
+P2
+Earth mode
+The same model applied to patients on long bed rest or in intensive care.
+P2
+Research API
+Export forecasts and outcomes, and import new datasets to retrain the model.
+
+Science model and data
+The twin starts from published rates of loss in spaceflight, then adjusts them for the person, the countermeasures and any injury. A simple, explainable model is more credible to judges than a black-box one, and it can be built in a weekend.
+Core model, per tissue. Each tissue (bone, muscle, aerobic fitness) loses a share of its value every day in microgravity. Countermeasures reduce that rate, an injury raises it locally, and the value recovers after landing.
+V(t+1) = V(t) \cdot \left(1 - r \cdot (1 - c) \cdot m_{\text{injury}} \cdot m_{\text{person}}\right)
+Here V is the tissue value, r is the base daily loss rate, c is countermeasure effectiveness (0 to 1), m injury is the extra loss from an injured limb not being used, and m person adjusts for age and baseline fitness.
+Starting values (approximate, from memory; verify against the datasets below before the pitch):
+Bone: weight-bearing bones such as the hip and spine lose roughly 1 to 1.5% of their density per month without effective countermeasures.
+Muscle: leg and back muscles can lose a large share of their mass and strength on long missions without exercise; modern resistance exercise reduces this a lot.
+Aerobic fitness: fitness drops in the first weeks of flight, and the heart has to readapt to gravity after landing.
+Injury healing: bone and soft-tissue healing is thought to be slower in microgravity, based mainly on animal studies. Model this as a configurable slow-down factor.
+Data sources to use:
+Source
+What it gives the model
+NASA Open Science Data Repository (OSDR, includes GeneLab and ALSDA)
+Spaceflight biology data, including rodent bone and muscle studies, for loss and healing rates
+NASA Life Sciences Data Archive (LSDA)
+Summary data from human spaceflight and bed rest studies
+NASA Twins Study publications
+How one astronaut's body changed over a year in space compared with his twin on Earth
+Head-down tilt bed rest studies (NASA and the German Aerospace Center, DLR)
+The standard Earth-based copy of spaceflight deconditioning, which also links to Earth mode
+Human Research Program risk reports
+Official descriptions of each health risk and its current countermeasures
+
+Individual astronaut medical records are private, so the demo uses realistic made-up astronauts built from published averages.
+System architecture
+One Python service runs the twin, and a React app sends it inputs and draws the results. Model values come from NASA datasets and are stored as settings, so they can be updated without changing code.
+[embed: node/a71b0248-7ca9]
+Every screen calls the same forecast endpoint, so the 3D body, charts and alerts always agree.
+Tech stack
+Frontend: React, Three.js (via React Three Fiber) for the body, Recharts for the curves, Tailwind for styling.
+Backend: Python with FastAPI; NumPy and pandas for the model; model values in a JSON settings file.
+AI explanations (P1): a language model API that turns each forecast into a short plain-language note.
+Hosting: Vercel for the frontend and Render or Railway for the API; free tiers are enough for the demo.
+3D model: a free anatomy model in glTF format, with bone and muscle groups as separate meshes so each can be colored.
+UX and demo design
+The whole demo happens on one screen: a glowing 3D body in the center, with the mission timeline along the bottom. Judges should understand the product within 10 seconds of seeing it.
+Screen layout
+Center: a 3D astronaut body. Bones and muscles fade from blue (healthy) to orange and red (weakened) and visibly thin as the timeline moves forward.
+Bottom: a mission timeline scrubber from launch to 90 days after landing, with markers for the injury, spacewalks and landing.
+Left panel: the crew profile and the injury picker.
+Right panel: countermeasure sliders, the three risk scores and line charts for bone, muscle and fitness.
+Top bar: crew switcher and a "Mission: ISS / Moon / Mars" toggle that adds a communication-delay badge.
+The 3-minute demo script
+Meet the crew member: day 1, all tissues blue, mission length 180 days.
+Press play: the body slowly turns orange as standard exercise only partly holds back the loss.
+Day 40, ankle sprain: the left leg turns red and the landing-day risk score turns red.
+Ask "what if": drag the sliders to a modified upper-body and single-leg exercise plan plus more protein. The curves split into before and after lines.
+Show the result: landing-day risk moves from red to yellow, with a sentence explaining why.
+Switch to Mars: a 20-minute delay badge appears and the crew gets the plan on board.
+Close with Earth mode: the same body, now a patient in hospital bed rest.
+Design style: a dark mission-control theme, one accent color, large clear numbers and smooth animations. Avoid clutter: the body and one before-and-after comparison carry the story.
+Hackathon scope and build plan
+The plan assumes a team of 4 and about 48 hours: a model person, a 3D/frontend person, a dashboard/backend person and a pitch/design lead. Build the P0 features only; add P1 features after hour 36 if things are on track.
+Hours
+Model
+3D and frontend
+Dashboard and backend
+Pitch and design
+0–4
+Gather loss rates from the datasets; agree on model inputs
+Set up the React and Three.js app; load a free 3D body model
+Set up FastAPI; define the forecast API
+Pick the challenge; write the problem story; sketch screens
+4–16
+Build the daily forecast for bone, muscle and fitness
+Color and thickness changes on the body; timeline scrubber
+Crew profiles and sample astronauts; connect to the model
+Design system, colors and layout in Figma
+16–28
+Add the injury module and countermeasure effects
+Sliders; before and after charts
+Risk scores and alert rules
+Write the demo script; collect citations
+28–36
+Tune values against published numbers; write a validation note
+Polish animations; Mars delay badge
+Deploy the app; fix bugs
+Build the slides; record a backup demo video
+36–44
+Stretch: simulated sensor feed
+Stretch: Earth mode view
+Stretch: AI explanations
+Rehearse the pitch 3 times
+44–48
+Freeze the code
+Final visual pass
+Final deploy and check the link
+Submit the project page, video and slides
+
+Submission checklist: a 30-second video, a live demo link, a GitHub repo, a project page that names each NASA dataset used, and a short note on the model's limits.
+Success metrics
+At the hackathon, success means a working demo that judges understand quickly and trust. In a real deployment, it means forecasts that match what actually happens to crews.
+Stage
+Metric
+Target
+Hackathon
+The full 3-minute demo runs live without breaking
+100% of rehearsals
+Hackathon
+Forecasts match the published average loss rates
+Within 10% of the cited values
+Hackathon
+A first-time viewer can explain what the product does
+Within 30 seconds, tested on 5 people
+Hackathon
+NASA datasets cited on the project page
+At least 3
+Pilot
+Forecast error for bone density at landing
+Under 1 percentage point
+Pilot
+Injury recovery forecast versus actual return to full duty
+Within 1 week
+Pilot
+Flight surgeons who say it changed or confirmed a decision
+At least half of pilot users
+Scale
+Crews monitored at the same time
+50 or more
+
+Risks and mitigations
+The biggest risk is credibility: judges will ask how a weekend model can predict a human body. The answer is to be open about what the model is, show its sources and show its limits.
+Risk
+Why it matters
+Mitigation
+Little human data is public
+Real astronaut records are private and samples are small
+Use published averages and animal and bed rest data; label it a research prototype
+Model looks too simple
+Judges may doubt a formula-based forecast
+Show each assumption and its citation; show an uncertainty band on every curve
+Medical claims overreach
+A health tool that sounds like a diagnosis loses trust
+Clear wording: forecasts and suggestions, approved by a clinician
+The 3D body takes too long to build
+It is the centerpiece of the demo
+Use a free ready-made body model; fall back to a 2D body outline with colored zones
+Scope creep
+Too many features and nothing polished
+Lock the P0 list at hour 4; stretch goals only after hour 36
+The live demo fails
+A broken demo can sink the pitch
+Record a backup video; keep a local copy that works offline
+Privacy in a real product
+Health data is very sensitive
+Plan for encryption, access by role and crew consent in the roadmap
+
+Roadmap and Space Apps fit
+Roadmap
+Hackathon prototype: forecasts from published averages, an injury module, countermeasure simulator and the 3D body.
+Research pilot: calibrate against bed rest study data with a university space medicine lab; add uncertainty estimates.
+Commercial stations: a fleet dashboard and an API for station operators and private mission companies, whose crews include older and less-trained flyers.
+Moon and Mars: an on-board version that runs without the ground and learns from each crew member's own sensor data.
+Earth spin-off: the same model for patients on long bed rest, in intensive care or with limited mobility.
+How it fits Space Apps
+Category: Space Science and Astronaut Health, the same area as the SpaceGenes+ winner.
+Challenge: pick this year's challenge about astronaut health, space biology or human spaceflight, and open the pitch with that challenge's own wording.
+Awards to aim for: Best Use of Science (real loss rates and NASA datasets), Best Mission Concept (support for future crews at scale) and Galactic Impact (the Earth spin-off).
+Pitch order: the injured astronaut with no hospital, the twin forecasting recovery, the before-and-after plan, the Mars delay, then the hospital patient on Earth.
+Open questions
+Which challenge from this year's list will the team submit to?
+Which loss and healing values will the team cite? The figures in this PRD are approximate and need checking against the datasets.
+Is there a team member with a medical or biology background to review the model?
+
