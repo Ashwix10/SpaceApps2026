@@ -119,3 +119,10 @@ body{background:var(--bg);color:var(--text)}
 .evidence-gap{font-size:12px;color:var(--muted)}.evidence-gap b{color:var(--text);font-weight:500}
 
 @media(max-width:1000px){.workspace-shell .forecast-charts{grid-template-columns:1fr}}
+.workspace-shell .measure-delta{display:block;margin-top:8px;font-style:normal;font-size:11px;letter-spacing:.02em;color:var(--muted);font-variant-numeric:tabular-nums}
+.workspace-shell .measure-up .measure-delta{color:#6ee7b7}
+.workspace-shell .measure-down .measure-delta{color:#fca5a5}
+.workspace-shell .plan-peaks{margin-top:24px;padding:28px;border:1px solid var(--line);border-radius:16px;background:#000}
+.workspace-shell .plan-peaks-heading h2{font-weight:300;font-size:24px;margin:10px 0 6px}
+.workspace-shell .plan-peaks-heading p{color:var(--muted);font-size:12px;max-width:640px}
+.workspace-shell .plan-peaks-cards{display:flex;justify-content:center;align-items:center;gap:72px;padding:56px 0 40px;overflow:hidden}

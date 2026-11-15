@@ -47,9 +47,9 @@
   },
   "countermeasure_direction": {
     "hip_at_landing_pct": {
-      "lighter_resistance": 95.93,
-      "stronger_resistance": 97.94,
-      "stronger_resistance_plus_bisphosphonate": 98.97
+      "lighter_resistance": 96.2,
+      "stronger_resistance": 97.36,
+      "stronger_resistance_plus_bisphosphonate": 98.67
     },
     "checks": [
       {

@@ -1,10 +1,10 @@
 {
-  "version": "0.3-human-cohort-development",
+  "version": "0.4-dose-response",
   "daily_loss": {
-    "hip_bmd": 0.00031476828742549307,
-    "spine_bmd": 0.00019558464542157592,
-    "leg_muscle": 0.0001271660785442827,
-    "vo2max": 0.0007277651214891989
+    "hip_bmd": 0.00031479858873420416,
+    "spine_bmd": 0.00019560347346416095,
+    "leg_muscle": 0.0001271866558198903,
+    "vo2max": 0.0007279082387425308
   },
   "loss_floor_pct": {
     "hip_bmd": 80,
@@ -14,9 +14,13 @@
   },
   "countermeasure_max_effect": {
     "resistance": 0.6,
-    "aerobic": 0.5,
+    "aerobic": 0.65,
     "protein": 0.1,
     "bisphosphonate": 0.5
+  },
+  "dose_saturation_min": {
+    "resistance": 54.6,
+    "aerobic": 40.9
   },
   "injury": {
     "ankle_sprain": {

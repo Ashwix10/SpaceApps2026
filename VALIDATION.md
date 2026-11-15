@@ -1,6 +1,6 @@
 # Validation status
 
-Current as of 2026-11-15 · model 1.1-cohort-development · parameters 0.3-human-cohort-development.
+Current as of 2026-11-15 · model 1.2-dose-response · parameters 0.4-dose-response.
 Earlier milestone notes are kept in [docs/validation-history.md](docs/validation-history.md).
 
 ## What the model is checked against
@@ -18,7 +18,7 @@ Fitting four group averages is calibration, not independent validation of indivi
 
 | Command | Covers |
 |---|---|
-| `pytest model api` | 31 tests: model shapes and behaviour, every API route, 422 errors, explain fallback |
+| `pytest model api` | 41 tests: model shapes and behaviour, every API route, 422 errors, explain fallback, and dose-response checks (every extra 30 minutes of exercise improves every measure; no flat plateaus) |
 | `python scripts/calibrate.py` | Sprint fit, countermeasure direction checks, Moore comparison |
 | `python docs/validate.py` | Every numeric parameter has an evidence status; scenario shapes; writes `docs/validation.md` |
 | `npm --prefix web test` | 8 frontend contract and workspace tests |
@@ -27,6 +27,7 @@ Fitting four group averages is calibration, not independent validation of indivi
 
 ## Still assumed (not validated)
 
+- **Dose-response shape**: exercise benefit follows a diminishing-returns curve (`dose_saturation_min`), tuned so the 60-minute reference effect, and therefore the NASA calibration, is unchanged.
 - **Effect sizes** of exercise minutes, protein, calories and bisphosphonate. Only their direction is checked; the per-site tables of Smith 2012 and LeBlanc 2013 are paywalled.
 - **Injury** loss and healing factors.
 - **Recovery half-lives**, loss floors and risk-colour cutoffs.

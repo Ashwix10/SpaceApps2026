@@ -65,9 +65,11 @@ test('comparison summary uses landing, preserves direction and names tradeoffs',
   alternative.series.hip_bmd_pct[landing] += 2;
   alternative.series.vo2max_pct[landing] -= 3;
   const summary = comparisonSummary({ baseline, alternative });
-  assert.match(summary, /cardio fitness: 3.0 points lower/);
-  assert.match(summary, /opposite direction/);
-  assert.match(comparisonSummary({ baseline, alternative: baseline }), /similar estimates/);
+  assert.match(summary, /keeps more hip bone \(\+2\.0\)/);
+  assert.match(summary, /keeps less cardio fitness \(−3\.0\)/);
+  assert.match(comparisonSummary({ baseline, alternative: baseline }), /same estimates/);
+  const plan = mockDefaults.demo.countermeasures;
+  assert.match(comparisonSummary({ baseline, alternative }, plan, { ...plan }), /same as the current one/);
 });
 
 const { emptyWorkspace, createFlight, updateFlight, archiveFlight, parseWorkspace } = load('../src/workspace.ts');

@@ -1,11 +1,11 @@
 """Deterministic implementation of the build-plan equations, not a clinical model."""
 from copy import deepcopy
 import json
-from math import prod
+from math import exp, prod
 
 from .schemas import ForecastRequest
 
-MODEL_VERSION = "1.1-cohort-development"
+MODEL_VERSION = "1.2-dose-response"
 TISSUES = ("hip_bmd", "spine_bmd", "leg_muscle", "vo2max")
 KEYS = dict(zip(TISSUES, ("hip_bmd_pct", "spine_bmd_pct", "leg_muscle_pct", "vo2max_pct")))
 
@@ -21,10 +21,17 @@ def load_params(path: str = "data/params.json") -> dict:
 
 def effectiveness(measures, params, back_injury=False):
     limits = params["countermeasure_max_effect"]
-    resistance = limits["resistance"] * min(measures["resistance_min_per_day"] / 90, 1)
+    saturation = params["dose_saturation_min"]
+
+    def dose(kind, minutes):
+        # Diminishing returns: every extra minute still helps, but less than the one before.
+        # The effect approaches limits[kind] and never plateaus abruptly.
+        return limits[kind] * (1 - exp(-max(0.0, minutes) / saturation[kind]))
+
+    resistance = dose("resistance", measures["resistance_min_per_day"])
     if back_injury:
         resistance *= 0.5
-    aerobic = limits["aerobic"] * min(measures["aerobic_min_per_day"] / 60, 1)
+    aerobic = dose("aerobic", measures["aerobic_min_per_day"])
     protein = limits["protein"] * clamp((measures["protein_g_per_kg"] - 0.8) / 0.8)
     medication = limits["bisphosphonate"] if measures["bisphosphonate"] else 0
 

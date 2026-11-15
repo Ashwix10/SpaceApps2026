@@ -1,6 +1,6 @@
 {
   "reviewed_on": "2026-11-15",
-  "params_version": "0.3-human-cohort-development",
+  "params_version": "0.4-dose-response",
   "overall_status": "Published human-cohort reference fit; educational simulation, not clinical or independently validated",
   "bone_anchor": {
     "monthly_loss_fraction": 0.0125,
@@ -114,7 +114,16 @@
         "countermeasure_studies",
         "nasa_exercise"
       ],
-      "note": "Stronger resistance exercise and adding a bisphosphonate reduce modeled hip loss, the same direction NASA crews showed (Smith 2012; LeBlanc 2013). The size of each effect is still assumed; the per-site tables needed to fit it were not openly accessible."
+      "note": "Each effect is the ceiling of a diminishing-returns curve. Stronger resistance exercise and adding a bisphosphonate reduce modeled hip loss, the same direction NASA crews showed (Smith 2012; LeBlanc 2013). The size of each effect is still assumed; the per-site tables needed to fit it were not openly accessible."
+    },
+    {
+      "path": "dose_saturation_min",
+      "label": "Exercise dose-response shape",
+      "status": "development assumption",
+      "source_ids": [
+        "nasa_exercise"
+      ],
+      "note": "Minutes at which an exercise type reaches about 63% of its ceiling. Chosen so the 60-minute reference keeps the same effect as before (strength 0.40, cardio 0.50), so the NASA calibration is unchanged; above and below 60 minutes the curve is an assumption."
     },
     {
       "path": "injury",
