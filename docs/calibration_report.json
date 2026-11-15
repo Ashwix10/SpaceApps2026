@@ -45,6 +45,29 @@
     "outside_reported_mean_ci": true,
     "interpretation": "The smooth model misses early-flight adaptation. Cohort/protocol differences also prevent an individual-accuracy claim."
   },
+  "countermeasure_direction": {
+    "hip_at_landing_pct": {
+      "lighter_resistance": 95.93,
+      "stronger_resistance": 97.94,
+      "stronger_resistance_plus_bisphosphonate": 98.97
+    },
+    "checks": [
+      {
+        "study": "Smith SM, Heer MA, Shackelford LC, Sibonga JD, Ploutz-Snyder L, Zwart SR. J Bone Miner Res 2012;27(9):1896-1906",
+        "doi": "10.1002/jbmr.1647",
+        "check": "stronger_resistance_less_hip_loss",
+        "passed": true
+      },
+      {
+        "study": "LeBlanc A, et al. Osteoporos Int 2013;24(7):2105-2114",
+        "doi": "10.1007/s00198-012-2243-z",
+        "check": "bisphosphonate_adds_protection",
+        "passed": true
+      }
+    ],
+    "interpretation": "The plans rank in the same direction as NASA crews. Effect sizes are assumed, not fitted.",
+    "not_established": "How many minutes of exercise produce how much benefit, and the size of the medication effect. Next step: obtain the full text (Smith 2012 Table 3; LeBlanc 2013 Table 2) and fit countermeasure_max_effect."
+  },
   "limits": [
     "Group means are not individual records; their ratio is not the mean paired percentage change.",
     "SE describes the mean, not an individual prediction interval. Paired covariance is unavailable.",

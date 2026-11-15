@@ -1,132 +1,39 @@
-# Current milestone: science provenance and generic bone anchor
+# Validation status
 
-Added data/evidence.json, a Science & limits view with offline source summaries, four explicitly fictional crew presets, and docs/science.md. The bone base-rate anchor is the chosen 1.25% per 30 days midpoint of a cited broad range, converted to a compounded daily rate; separate hip/spine calibration is not claimed. Other numerical settings remain development assumptions. The source/model version mismatch is displayed when applicable.
+Current as of 2026-11-15 · model 1.1-cohort-development · parameters 0.3-human-cohort-development.
+Earlier milestone notes are kept in [docs/validation-history.md](docs/validation-history.md).
 
-The focused provenance/anchor check verifies every numeric parameter is classified, checks version consistency and source IDs, and validates four scenario shapes. It produces docs/validation.md. Matching the selected range is by construction and does not establish predictive accuracy. The renderer build and a focused browser check passed, including the science view, source summaries, four crew options and version-mismatch warning. The offline explanation retains its development label. No broad regression suite was rerun for this milestone.
+## What the model is checked against
 
-Earlier milestone records follow.
+| Check | Source | Result |
+|---|---|---|
+| Hip, spine, leg lean tissue and VO2peak decline | NASA Sprint study, 17 ISS astronauts, 165-day missions (English et al. 2020, CC BY) | All four group averages reproduced to rounding (`scripts/calibrate.py`) |
+| Stronger resistance exercise protects hip bone | Smith et al. 2012, ARED vs iRED crews (abstract) | Direction matches |
+| Adding a bisphosphonate gives further protection | LeBlanc et al. 2013, via the open review by Rosenthal et al. 2024 (CC BY) | Direction matches |
+| Early-flight VO2peak (day 15) | Moore et al. 2014, NASA NTRS 20140003748, different cohort | **Missed.** The smooth model does not reproduce early adaptation. Reported in `docs/calibration_report.json` and shown on the chart |
 
-# Current milestone: dashboard controls and guided demo
+Fitting four group averages is calibration, not independent validation of individual predictions.
 
-Added independent current/new plan editors, copy/reset actions, risk-score differences, four tissue comparison charts with uncertainty envelopes and day/landing cursors, timeline playback at 1x/4x/16x, audience selection, and a six-step guided demo. Manual interaction stops the demo; changed inputs invalidate old explanations. Destination assumptions remain visibly disclosed.
+## Automated checks (all passing)
 
-Verification used the TypeScript/production build and focused browser checks. Editable comparison/copy, four-chart rendering and the guided demo's completion state were checked. The mouse-down handoff issue was corrected by cancelling in the bubbling event phase after the control event; a focused follow-up verified 16x playback and first-click manual interruption. No broad regression suite was rerun.
+| Command | Covers |
+|---|---|
+| `pytest model api` | 31 tests: model shapes and behaviour, every API route, 422 errors, explain fallback |
+| `python scripts/calibrate.py` | Sprint fit, countermeasure direction checks, Moore comparison |
+| `python docs/validate.py` | Every numeric parameter has an evidence status; scenario shapes; writes `docs/validation.md` |
+| `npm --prefix web test` | 8 frontend contract and workspace tests |
+| `npm run build:web` | TypeScript check and production build |
+| `python scripts/smoke.py <url>` | All seven API routes against a running server |
 
-Earlier milestone records follow.
+## Still assumed (not validated)
 
-# Current milestone: interactive body visualization
+- **Effect sizes** of exercise minutes, protein, calories and bisphosphonate. Only their direction is checked; the per-site tables of Smith 2012 and LeBlanc 2013 are paywalled.
+- **Injury** loss and healing factors.
+- **Recovery half-lives**, loss floors and risk-colour cutoffs.
+- **Moon and Mars**: they use the ISS rates; partial gravity is not modelled.
+- **Individual differences**: age, sex and fitness factors are neutral. Fitting them needs individual records from NASA's Life Sciences Data Archive.
 
-Added a local Three.js body with nine selectable regions, health-color/thickness animation, injury pulse, orbit/zoom, two-plan comparison, legend, keyboard-accessible region controls and a 2D fallback. The sandbox uses the actual generated forecast fixture. No remote models, fonts or textures are required.
+## Not yet done
 
-Verification for this change was limited to one TypeScript/production build and one focused browser visual check covering canvas rendering, region selection, comparison and the two-body 2D fallback. No broad test rerun was performed. The screenshot was inspected; this was a browser check of the local desktop host, not an installed Electron release check.
-
-Earlier milestone records follow.
-
-# Current milestone: development forecast engine
-
-The flat Python stub has been replaced with loss, recovery, injury and countermeasure calculations. The default demo now projects hip bone at 95.94% and aerobic fitness at 84.12% at landing; its alternative projects 98.63% and 80.56%, illustrating a real trade-off within these development assumptions. These figures are simulation outputs, not evidence of scientific accuracy.
-
-Current checks: 32 Python/model/API/offline-explanation tests, five frontend contract tests and four desktop lifecycle tests passed (41 total). Renderer TypeScript/build, desktop-host smoke and a headless Chrome dashboard check also passed. The root npm lockfile generated by the user is retained. The 3D body, full dashboard/demo, cited parameter calibration and installer acceptance remain unfinished.
-
-The sections below record the earlier desktop-transition milestone and its limitations.
-
-# Desktop transition validation
-
-November 14, 2026. Local integration branch: default. Plan 2.0 / contract 1.1.
-
-## Passed in this transition
-
-| Check | Result |
-| --- | --- |
-| Python model and standalone API tests | 14 passed on Python 3.12.14 |
-| Frontend contract tests | 5 passed |
-| Renderer TypeScript check and Vite production build | Passed; desktop build forces /api and mocks off |
-| Desktop process lifecycle tests | 4 passed |
-| Authenticated desktop-host smoke | All seven API routes, local UI, template explanation and shutdown passed |
-| Headless Chrome UI check against the desktop host | API mode, nine regions, day slider, comparison, explanation and body sandbox passed |
-| External renderer downloads in that browser check | None |
-| JavaScript page errors in that browser check | None |
-| Plan/contract consistency | Embedded contract matches CONTRACT.md exactly |
-| Model/API compatibility | JSON shapes and Python function signatures unchanged |
-| Python runner/PyInstaller spec/Node syntax | Passed |
-
-Lifecycle tests cover unauthorized requests, correct session access, backend shutdown and port release, parent-pipe EOF after a simulated parent crash, missing executable and cancellation during startup. The browser check used a fresh isolated Chrome session; it was not an Electron-window test.
-
-The existing Python tests still exercise a stub model. They do not establish scientific or clinical accuracy. The initial body is still a placeholder.
-
-## Remaining verification and download blockers
-
-Root npm installation was attempted but the environment blocked access to registry.npmjs.org. PyInstaller installation was also attempted but its package index was unreachable. Therefore:
-
-- Electron itself has not launched in this environment.
-- Root package-lock.json has not yet been generated; generate and commit it after a successful npm install.
-- The PyInstaller backend build, electron-builder output, installer contents and clean-machine installation have not been run.
-- The Windows packaging GitHub Actions workflow is provided but has not executed or produced an artifact.
-- Nothing has been published or pushed to GitHub in this transition.
-
-A renderer build, source process test or browser check must not be reported as installer acceptance.
-
-## Next commands on the user's connected terminal
-
-The earlier skeleton run already installed the venv and renderer dependencies. From the same repo root in CMD:
-
-```cmd
-npm install
-npm start
-```
-
-This should open the actual desktop window and start its own backend. Confirm the API-connected badge, close/reopen, and try a second launch.
-
-For an installer:
-
-```cmd
-.venv\Scripts\python.exe -m pip install -r desktop/requirements-build.txt
-npm run dist:win
-```
-
-Expected installer: release/AstroTwin-0.2.0-x64-Setup.exe. This is an expected build output, not a file already produced here. Follow the clean-machine acceptance checklist in AstroTwin_Build_Plan.md before distributing it.
-
-## Nonblocking messages
-
-The current environment reports a Starlette/httpx test-client deprecation warning, a pytest cache permission warning and a renderer bundle-size warning. All listed tests passed despite those messages. Packaging/GUI checks remain separate.
-
-Technical basis: Electron's documented isolated/sandboxed renderer, electron-builder v26 extraResources/NSIS configuration, and PyInstaller one-folder resource handling. Links are in the revised plan.
-
-## 2026-11-15: simple routines and NASA reference observations
-
-- Production TypeScript/Vite build passed. Existing large-bundle advisory remains.
-- One focused real-browser flow passed: three exercise choices, no visible sliders in the routine panel, a successful live no-exercise comparison, preserved food/medication, visible NASA aggregate findings, and no horizontal overflow in the narrow-screen panel. No page errors occurred.
-- NASA sources were checked directly for bone loss, average ISS fitness losses and exercise context. `data/nasa_observations.json` contains published summary values, not raw astronaut health records. No model calibration or independent scientific validation is claimed in this step.
-- Routine UI changes preserve existing API schemas and simulation equations. Broad test suites were not repeated for these presentation/provenance changes.
-
-## 2026-11-15: human-cohort reference and browser completion
-
-This entry supersedes earlier generic-bone-only scientific status. It describes an educational release, not clinical readiness.
-
-- `scripts/calibrate.py`: four matching source endpoints reconstructed within rounding at their postflight test offsets. The report includes a separate historical day-15 cardio mismatch (model 99.46% versus reported mean 83%, CI 78–87%). This is not independent prediction validation; no accuracy percentage is claimed.
-- `docs/validate.py`: provenance coverage and four scenario shapes passed. Fixtures regenerated with the current model/parameters.
-- Python model/API/explanation checks: 34 passed in 1.19 seconds. Nonblocking warnings: Starlette's httpx TestClient deprecation and a denied pytest cache directory. Tests were not repeated unnecessarily.
-- Frontend checks: six passed, including comparison direction, equality and trade-off wording.
-- Production TypeScript/Vite build passed. The primary entry chunk is approximately 264 kB uncompressed, charts approximately 405 kB and the lazy 3D chunk approximately 941 kB. Vite still warns about the 3D chunk's size; no claim of a measured network-performance benchmark is made.
-- One comprehensive Chrome flow passed against the real UI/API: local startup, no initial injury, lazy chart loading, comparison and its plain summary, preservation of food/medication, human-shaped 2D keyboard selection, four charts, source table, Escape dismissal, Moon/Mars scope notice, 390px layout and retry after a deliberately aborted request without losing edited inputs. No page errors occurred. The desktop overview was visually inspected.
-- Live smoke passed all seven API routes on port 18767. This was a temporary local preview, not public hosting.
-- Local Docker engine unavailable; container build, Linux clean-host install and public HTTPS release were not verified. Docker/Render recipes are supplied in api/Dockerfile and render.yaml. See docs/RELEASE.md.
-- No prospective user study, clinical assessment, independent individual-data validation, operational clearance or competition score is claimed.
-
-## 2026-11-15: five-page interface remodel and imported human asset
-
-- Replaced the single dashboard/drawer flow with opening, Mission, Explore, Compare and Research pages, each with a hash URL and layout. Framer Motion transitions respect reduced motion. Browser navigation retains in-memory mission settings; reload intentionally initializes the default scenario.
-- Replaced the active procedural mannequin with the official MakeHuman hm08 base surface (CC0). A 650,056-byte local GLB has 13,524 vertices and 27,036 triangles. The source header, license links, hashes and conversion method are retained. It is a generic reference, not a NASA scan. Mesh thickness is no longer distorted by simulated health.
-- Production TypeScript/Vite build passed. Nonblocking advisories remain for the lazy 3D chunk size and ignored Framer Motion use-client directives in this Vite browser build.
-- Six frontend checks passed. Model/API/explanation suites were not repeated because scientific equations, parameters and API shapes were unchanged in this remodel.
-- Focused real-browser flow verified entry, all four app pages, mission duration and crew edits, launch-to-recovery timeline, comparison choices, four optional charts, original research table, Back/Forward and mission-state retention. Baseline food changes were checked to carry into the alternative, and deliberately different food settings were visibly labeled. No browser error logs were observed.
-- Visually inspected the imported model on the opening page, exploration view and both comparison bodies. Verified 390px layouts without horizontal page overflow, three routine choices and no visible routine sliders. Camera distance adapts to keep both A-pose references inside a narrow comparison view.
-- Research source data, fit limitations, independent-project wording and lack of clinical validation remain explicit. The remodel does not constitute scientific validation, usability-study evidence, a hosted release or a guaranteed competition score.
-
-## Workspace management update
-
-- Production TypeScript/Vite build passed; existing lazy-3D bundle advisory remains. A malformed CSS grouping found during visual QA was corrected and the built interface was visually rechecked.
-- Eight frontend checks passed, including new persistence/isolation/archive/restore behavior and rejection of damaged or unsupported workspace records. Scientific parameters and API shapes were unchanged; the broad Python suites were not repeated.
-- A real-browser flow created two named flights with different astronauts, destinations, durations and routines; verified independent settings after switching and reloading; archived/restored and renamed a flight; added/edited a custom simulation profile; and created a linked flight for it. The custom-profile flight reopened into the working body/timeline view after refresh. No browser error logs were observed.
-- Verified a 390px workspace without horizontal document overflow and visually inspected desktop and mobile management layouts.
-- Saved data is local to the browser origin, not cloud or multi-user storage. Storage failures and unreadable data are explicitly reported; unreadable saved content is not automatically replaced. No clinical capability or additional scientific validation is claimed by these management features.
+- No public deployment. The Dockerfile and `render.yaml` are ready, but the container hasn't been built on a machine with a running Docker engine.
+- No user testing with flight surgeons.

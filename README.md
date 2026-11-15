@@ -1,32 +1,41 @@
 # AstroTwin
 
-A browser-based astronaut health research prototype. The interface is mostly black and white, with color reserved for meaningful changes. The React UI, Python engine, API, 3D body, comparison logic, timeline and source work are preserved from the earlier desktop version.
+**A digital twin of an astronaut's body that a flight surgeon can test plans on before acting.**
 
-## Open the web app
+An astronaut sprains an ankle on day 40 of a 180-day mission. Bone and muscle are already declining in microgravity, and the injury adds to it. Will they be fit for the day-120 spacewalk, and for landing? AstroTwin forecasts hip and spine bone density, leg lean tissue and aerobic fitness day by day through landing and 90 days of recovery. You can compare two countermeasure plans (exercise, protein, calories, bone medication) side by side on a 3D body.
 
-From CMD in the repository folder:
+Commercial stations, private astronauts and Artemis crews will bring more people, older and less-trained flyers, and longer communication delays. Health planning has to become personal and predictive.
 
-```cmd
-cd /d "C:\Users\adity\OneDrive\Documents\SpaceApps\SpaceApps2026"
-npm start
-```
+## How it uses NASA data
 
-Open **http://localhost:8000**. This command builds the UI and starts one Python service for both the page and /api. Press Ctrl+C to stop it. Close any previous server using port 8000 first; to use another port in CMD, run `set PORT=8001` before `npm start`.
+- **Calibrated:** the four loss rates are fitted to the NASA Sprint study (English et al. 2020: 17 ISS astronauts, 165-day missions). `scripts/calibrate.py` reproduces all four published group averages.
+- **On every chart:** the measured NASA averages appear as white diamonds with error bars on the forecast curves. A separate NASA early-flight result (Moore 2014) is shown in orange, including where the model misses it.
+- **Countermeasure checks:** the model ranks plans the same way NASA crews did. Crews using the ARED resistance machine kept hip bone better (Smith 2012), and adding a bisphosphonate protected it further (LeBlanc 2013).
+- **Honest about gaps:** every parameter is labelled measured or assumed in `data/evidence.json` and on the in-app Research page. See [VALIDATION.md](VALIDATION.md) and [docs/science.md](docs/science.md).
 
-No Electron window or new dependency installation is needed for an existing working checkout.
+## How it differs from earlier work
 
-## First-time setup
+NASA's Digital Astronaut Project and related research built physiology models for scientists. AstroTwin puts that kind of model into a decision tool for the person who has to choose. It combines three things in one view: the in-flight injury, a side-by-side comparison of two plans, and a body you can scrub through the mission. Every curve is checked against published NASA astronaut data.
 
-Requires Python 3.11 and Node 20.19+ or a supported newer LTS. From the repository root:
+It is a research prototype calibrated to group averages, not a certified medical device or a personal prediction.
 
-```cmd
-py -3.11 -m venv .venv
-.venv\Scripts\python.exe -m pip install -e model -e explain -r api/requirements.lock
+## Quick start (fresh clone)
+
+Requires Python 3.11+ and Node 20.19+. Run these from the repository root.
+
+```bash
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -e model -e explain -r api/requirements.txt   # Windows
+# .venv/bin/python -m pip install -e model -e explain -r api/requirements.txt       # macOS / Linux
 npm --prefix web ci
 npm start
 ```
 
-Reuse an existing working .venv. ASTROTWIN_PYTHON can point to another Python executable. Root npm installation is unnecessary for the web runtime; root desktop dependencies are retained only for optional legacy builds.
+Open **http://localhost:8000**. `npm start` builds the UI and runs one Python server for both the page and `/api`. Press Ctrl+C to stop it. To use another port, set `PORT` first (Windows CMD: `set PORT=8001`). `ASTROTWIN_PYTHON` can point to a different Python executable.
+
+This is a built React app, so opening `index.html` directly or using VS Code's Live Server shows a blank page. Always use `npm start`, or the development setup below. To view the app inside VS Code, run `npm start`, then open **Simple Browser: Show** from the Command Palette and enter `http://localhost:8000`.
+
+`api/requirements.lock` pins the exact versions the checks were run with.
 
 ## Workspace and navigation
 
@@ -36,7 +45,7 @@ AstroTwin opens on a flight-management workspace. Choose **New flight**, give it
 - **Astronauts** (`#/astronauts`): browse the four fictional starter profiles, add a simulation profile, edit its name/role and open or create its linked flights.
 - **Flight setup** (`#/mission`): edit the current flight's destination, duration, astronaut, routine and optional injury scenario.
 - **Body view** (`#/explore`): the human reference model and mission-to-recovery timeline for the current flight.
-- **Compare routines** (`#/compare`): a separately saved alternative routine for that flight, with optional detailed charts.
+- **Compare routines** (`#/compare`): a separately saved alternative routine for that flight, with charts that plot NASA astronaut measurements against both plans.
 - **Research & sources** (`#/research`): original measurements, citations, model assumptions and asset attribution.
 
 Flights, profiles and the selected flight save in this browser's local storage, including across a refresh. Use the same browser and origin/port to reopen them. This is local browser persistence, not cloud accounts or shared-client storage. If saved data cannot be read, it is preserved instead of silently overwritten; the app reports when changes can only last for the session.
@@ -75,7 +84,7 @@ The multi-stage recipe builds the renderer and serves UI/API together. The recip
 
 ## Earlier desktop work
 
-The desktop/ folder, optional `npm run start:desktop` and installer recipes are preserved. They are no longer part of normal browser startup. The shared integration branch remains default.
+The desktop/ folder, optional `npm run start:desktop` and installer recipes are preserved. They are no longer part of normal browser startup. The team's integration branch is `default`.
 
 ## Reproduce the research fit
 

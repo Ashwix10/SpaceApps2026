@@ -16,6 +16,17 @@ For each endpoint, observed fraction = postflight group mean / preflight group m
 
 The reference scenario uses 60 minutes strength plus 60 minutes cardio, protein 1.2 g/kg, full energy intake and no bone medication. This UI reference is an analyst convention, not a measurement of the cohort's precise dose. No treatment-effect coefficient is identified by this fit. A successful endpoint reconstruction is calibration consistency, not validation of the daily trajectory or exercise benefit.
 
+## Countermeasure direction checks
+`scripts/calibrate.py` also checks that the model ranks plans the way NASA crews did, using a 165-day reference mission:
+- Smith et al. (2012), JBMR, doi 10.1002/jbmr.1647. The abstract reports that hip and pelvis BMD were "unchanged from preflight only for ARED crewmembers" (n=5), unlike iRED crews (n=8). The model check: 90 minutes of daily resistance exercise gives more retained hip BMD than 30 minutes.
+- LeBlanc et al. (2013), Osteoporos Int, doi 10.1007/s00198-012-2243-z, as summarised by the open review by Rosenthal et al. (2024), Cells, CC BY, PMC11352369: "The combined therapies (ARED + BP) were associated with significant attenuation or complete protection in postflight aBMD". The model check: adding a bisphosphonate to strong resistance exercise retains more hip BMD.
+
+Both checks pass. They constrain direction only. The primary per-site tables were not openly accessible, so `countermeasure_max_effect` values remain assumptions. Source quotes are in data/research/countermeasure_studies.json.
+
+## NASA open data identified for the next step
+- NASA OSDR OSD-489: Rodent Research-1, 37 days on the ISS, lumbar vertebra micro-CT, flight versus ground control. It could check the shape of early trabecular loss. It does not set human rates.
+- NASA Life Sciences Data Archive (via the NASA Life Sciences Portal): individual crew records on request. These are required before fitting personal factors or claiming per-person accuracy.
+
 ## Research reviewed but not interchangeable
 
 - [NASA bone-risk summary](https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/): generic monthly range; now historical context, not the active site-specific fit.

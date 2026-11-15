@@ -1,0 +1,40 @@
+{
+  "id": "countermeasure_direction",
+  "reviewed_on": "2026-11-15",
+  "purpose": "Direction checks for the exercise and bone-medication effects. The primary papers' per-site tables were not openly accessible, so effect sizes are NOT fitted; only the direction of benefit is checked.",
+  "studies": [
+    {
+      "id": "smith_2012",
+      "citation": "Smith SM, Heer MA, Shackelford LC, Sibonga JD, Ploutz-Snyder L, Zwart SR. J Bone Miner Res 2012;27(9):1896-1906",
+      "doi": "10.1002/jbmr.1647",
+      "url": "https://doi.org/10.1002/jbmr.1647",
+      "access": "Abstract only (full text subscription)",
+      "population": "13 ISS crewmembers, 2006-2009, 4- to 6-month missions: 8 with iRED, 5 with ARED",
+      "quotes": [
+        "Of these 13, 8 had access to the iRED and 5 had access to the ARED.",
+        "Bone densitometry revealed significant interactions (time and exercise device) for pelvis bone mineral density (BMD) and bone mineral content (p < 0.01), hip femoral neck BMD (p < 0.05), trochanter BMD (p < 0.05), and total hip BMD (p < 0.05).",
+        "These variables were unchanged from preflight only for ARED crewmembers, who also returned from flight with higher percent lean mass and lower percent fat mass."
+      ],
+      "model_check": "stronger_resistance_less_hip_loss"
+    },
+    {
+      "id": "leblanc_2013",
+      "citation": "LeBlanc A, et al. Osteoporos Int 2013;24(7):2105-2114",
+      "doi": "10.1007/s00198-012-2243-z",
+      "url": "https://doi.org/10.1007/s00198-012-2243-z",
+      "access": "Not openly accessible; finding taken from the open review below",
+      "secondary_source": {
+        "citation": "Rosenthal R, et al. The Case for Bisphosphonate Use in Astronauts Flying Long-Duration Missions. Cells 2024",
+        "doi": "10.3390/cells13161337",
+        "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11352369/",
+        "license": "CC BY 4.0",
+        "quotes": [
+          "improved resistance training with ARED exercise attenuates previously observed declines in DXA-measured bone mineral density after the usual 6-month missions",
+          "The combined therapies (ARED + BP) were associated with significant attenuation or complete protection in postflight aBMD of crewmembers compared with those who used only ARED alone."
+        ]
+      },
+      "model_check": "bisphosphonate_adds_protection"
+    }
+  ],
+  "not_established": "How many minutes of exercise produce how much benefit, and the size of the medication effect. Next step: obtain the full text (Smith 2012 Table 3; LeBlanc 2013 Table 2) and fit countermeasure_max_effect."
+}

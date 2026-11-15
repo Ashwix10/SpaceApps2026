@@ -33,5 +33,23 @@
     "reported_hours_per_day": 2,
     "url": "https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/",
     "note": "NASA describes crews averaging about two hours of daily exercise. Our equal strength/cardio split and shorter routine are illustrative choices, not an astronaut prescription. A separate NASA risk summary describes 1.5 hours of training six to seven days per week; these accounts are not a single standardized protocol."
-  }
+  },
+  "open_data_roadmap": [
+    {
+      "id": "osdr_osd_489",
+      "label": "NASA OSDR OSD-489",
+      "title": "Quantifying Cancellous Bone Structural Changes in Microgravity: Axial Skeleton Results from the RR-1 Mission",
+      "url": "https://osdr.nasa.gov/bio/repo/data/studies/OSD-489",
+      "context": "Rodent Research-1 (SpaceX CRS-4): female C57BL/6J mice spent 37 days on the ISS; lumbar vertebra micro-CT, flight versus ground controls.",
+      "model_use": "Identified, not imported. Planned use: cross-species check of the shape of early trabecular bone loss. Mouse results do not set human rates."
+    },
+    {
+      "id": "lsda",
+      "label": "NASA Life Sciences Data Archive (LSDA)",
+      "title": "Individual astronaut measurements on request",
+      "url": "https://nlsp.nasa.gov/explore/lsdahome",
+      "context": "Individual crew bone, muscle and fitness records are held under NASA's data-request process.",
+      "model_use": "Not requested. Required before any per-person accuracy claim or fitted personal factors."
+    }
+  ]
 }

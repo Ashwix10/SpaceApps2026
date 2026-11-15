@@ -17,7 +17,7 @@
       "id": "nasa_bone",
       "title": "NASA: Risk of Spaceflight-Induced Bone Changes",
       "url": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
-      "finding": "NASA reports a broad average bone-density decline of 1\u20131.5% per month over four-to-six-month missions. This is not a site-specific fit or a uniform untreated cohort."
+      "finding": "NASA reports a broad average bone-density decline of 1–1.5% per month over four-to-six-month missions. This is not a site-specific fit or a uniform untreated cohort."
     },
     {
       "id": "nasa_muscle",
@@ -54,6 +54,12 @@
       "title": "Moore et al. (2014): Peak oxygen uptake",
       "url": "https://ntrs.nasa.gov/citations/20140003748",
       "finding": "A separate historical cohort had early-flight cardio changes the current smooth curve does not reproduce. This documented mismatch limits interpretation of daily predictions."
+    },
+    {
+      "id": "countermeasure_studies",
+      "title": "NASA countermeasure studies: ARED exercise (Smith 2012) and ARED + bisphosphonate (LeBlanc 2013)",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11352369/",
+      "finding": "Crews using the ARED resistance device returned with hip and pelvis bone density unchanged from preflight, unlike crews on the older iRED; adding a bisphosphonate gave further protection. The app checks that its plans rank the same way. Effect sizes are not fitted."
     }
   ],
   "parameters": [
@@ -103,11 +109,12 @@
     {
       "path": "countermeasure_max_effect",
       "label": "Exercise, nutrition and medication effects",
-      "status": "development assumption",
+      "status": "development assumption; direction checked against NASA studies",
       "source_ids": [
+        "countermeasure_studies",
         "nasa_exercise"
       ],
-      "note": "Related evidence supports studying countermeasures, but does not validate these exact efficacy fractions or our way of combining them."
+      "note": "Stronger resistance exercise and adding a bisphosphonate reduce modeled hip loss, the same direction NASA crews showed (Smith 2012; LeBlanc 2013). The size of each effect is still assumed; the per-site tables needed to fit it were not openly accessible."
     },
     {
       "path": "injury",
@@ -154,7 +161,7 @@
   "limits": [
     "Four endpoint rates are fitted to published group means under the reference routine, not to individual astronaut records.",
     "A fit to its own source values is not independent validation or a measure of prediction accuracy.",
-    "Postflight measurement timing is retained; bone/lean scans at days 7\u201314 use day 11 as a chosen fit approximation.",
+    "Postflight measurement timing is retained; bone/lean scans at days 7–14 use day 11 as a chosen fit approximation.",
     "Exercise dose, food, medication effects, injury curves and recovery half-lives remain scenario assumptions. More minutes need not mean better real-world outcomes.",
     "Daily cardio curves miss early-flight adaptation reported in a separate NASA cohort.",
     "Leg lean tissue is not strength; no measured fracture probability or operational clearance is produced.",

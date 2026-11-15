@@ -2,12 +2,13 @@ import study from '../../data/research/sprint_control.json';
 import observations from '../../data/nasa_observations.json';
 import evidence from '../../data/evidence.json';
 import params from '../../data/params.json';
+import countermeasures from '../../data/research/countermeasure_studies.json';
 
 const sourceNames: Record<string, string> = { nasa_bone: 'Bone changes in space', nasa_muscle: 'Muscle health', nasa_exercise: 'Exercise and recovery', nasa_fracture: 'Injury healing' };
 
 export function SciencePanel({ activeParamsVersion }: { activeParamsVersion?: string }) {
   return <section className="science-panel" aria-label="Sources and model limits">
-    <p>Four model rates reference published human measurements from NASA’s Sprint study. Daily curves and routine effects remain simplified assumptions.</p>
+    <p>Four model rates are fitted to published human measurements from NASA’s Sprint study. Exercise and medication effects are checked for direction against NASA countermeasure studies.</p>
     {activeParamsVersion && activeParamsVersion !== evidence.params_version && <p role="alert">The active settings differ from this source review. The references below may not cover them.</p>}
     <section className="study-reference"><h2>The human data behind the model</h2>
       <p>17 people. A 165-day average mission. Published group measurements, not personal health records.</p>
@@ -16,6 +17,13 @@ export function SciencePanel({ activeParamsVersion }: { activeParamsVersion?: st
       </tbody></table></div>
       <p>Group averages vary between studies. Leg lean-mass change was not statistically significant. Matching these values does not prove personal prediction accuracy.</p>
       <a className="source-link" href={study.url} target="_blank" rel="noopener noreferrer">Read the NASA Sprint study</a>
+    </section>
+    <section className="study-reference countermeasure-evidence"><h2>Do the plans rank the way NASA crews did?</h2>
+      <p>{countermeasures.purpose}</p>
+      <ul className="evidence-checks">{countermeasures.studies.map(item => <li key={item.id}><span className="check-badge">Direction matches</span><strong>{item.citation}</strong>
+        <blockquote>{(item.quotes ?? item.secondary_source?.quotes ?? []).at(-1)}</blockquote>
+        <a className="source-link" href={item.secondary_source?.url ?? item.url} target="_blank" rel="noopener noreferrer">{item.secondary_source ? 'Read the open review (CC BY)' : 'Read the abstract'} ↗</a></li>)}</ul>
+      <p className="evidence-gap"><b>Still assumed:</b> {countermeasures.not_established}</p>
     </section>
     <details><summary>Broader NASA findings</summary><NASAObservations /></details>
     <h2>Read the research</h2>
@@ -36,6 +44,11 @@ export function NASAObservations() {
       <a href={item.url} target="_blank" rel="noopener noreferrer">Read NASA findings</a>
     </article>)}</div>
     <p>These are published group summaries, not personal astronaut records. The app’s forecasts are simulations; they are not these measured results.</p>
+    <h3>NASA open data we plan to add</h3>
+    <div className="research-facts">{observations.open_data_roadmap.map(item => <article className="research-fact" key={item.id}>
+      <strong>{item.label}</strong><span>{item.title}</span><p>{item.context} {item.model_use}</p>
+      <a href={item.url} target="_blank" rel="noopener noreferrer">Open dataset</a>
+    </article>)}</div>
     <details><summary>How this research is used</summary>{observations.observations.map(item => <p key={item.id}>{item.model_use}</p>)}
       <p>{observations.exercise_context.note}</p><a className="source-link" href={observations.exercise_context.url} target="_blank" rel="noopener noreferrer">NASA exercise research</a>
     </details>

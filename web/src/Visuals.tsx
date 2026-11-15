@@ -24,6 +24,8 @@ export function OrbitalVisual() {
     <div className="orbital-grid"/>
     <div className="planet-halo"/>
     <div className="orbital-planet"><div className="planet-land"/><div className="planet-shadow"/></div>
+    <div className="orbit-moon"/>
+    <svg className="orbit-station" viewBox="0 0 64 28" fill="none" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round"><rect x="27" y="10" width="10" height="8" rx="1.5" fill="#0B1240"/><path d="M32 4v20M22 14h20"/><rect x="2" y="7" width="18" height="14" rx="1" fill="#4FD1FF33"/><rect x="44" y="7" width="18" height="14" rx="1" fill="#4FD1FF33"/><path d="M8 7v14M14 7v14M50 7v14M56 7v14"/></svg>
     <div className="orbital-ring ring-a"><i/></div><div className="orbital-ring ring-b"/><div className="orbital-ring ring-c"/>
     <div className="orbit-coordinate">HUMAN HEALTH / BEYOND EARTH</div>
     <div className="orbit-label"><span/><div>Explore what changes.<small>Understand what matters.</small></div></div>

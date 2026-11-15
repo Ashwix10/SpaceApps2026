@@ -1,0 +1,11 @@
+{
+  "id": "moore_2014",
+  "citation": "Moore AD Jr, et al. NASA NTRS 20140003748",
+  "url": "https://ntrs.nasa.gov/citations/20140003748",
+  "measurement": "Early-flight VO2peak (day 15), different historical cohort",
+  "series": "vo2max_pct",
+  "day": 15,
+  "observed_pct": 83,
+  "reported_95_ci_pct": [78, 87],
+  "role": "Challenge comparison, not a calibration target"
+}
