@@ -26,7 +26,7 @@ class RenderBoundary extends Component<{ children: ReactNode; fallback: ReactNod
 }
 
 export function BodyLegend() {
-  return <div className="body-legend"><div /><span>Baseline</span><span>Moderate loss</span><span>Severe loss</span></div>;
+  return <div className="body-legend"><div /><span>Before mission</span><span>Some change</span><span>More change</span></div>;
 }
 
 export function BodyTwin(props: BodyTwinProps) {
@@ -36,23 +36,23 @@ export function BodyTwin(props: BodyTwinProps) {
   const focused = hovered ?? selectedRegion;
   const fallback = <BodyTwin2D {...props} height={height} />;
   return <div className="body-twin">
-    <div className="twin-heading"><span className="eyebrow">BODY TWIN / DAY {day}</span>
-      <button className="view-toggle" onClick={() => setUse2D(value => !value)}>{use2D ? 'Try 3D' : '2D view'}</button></div>
-    <div className="twin-plan-labels"><span>Current plan</span>{compareRegions && <span>New plan</span>}</div>
+    <div className="twin-heading"><span className="eyebrow">Day {day}</span>
+      <button className="view-toggle" onClick={() => setUse2D(value => !value)}>{use2D ? '3D view' : '2D view'}</button></div>
+    {compareRegions && <div className="twin-plan-labels"><span>Current routine</span><span>New routine</span></div>}
     <div className="twin-canvas" style={{ height }}>
-      {use2D ? fallback : <RenderBoundary fallback={fallback}><Canvas camera={{ position: [0, 1.65, 6.4], fov: 36 }}
+      {use2D ? fallback : <RenderBoundary fallback={fallback}><Canvas camera={{ position: [0, 1.65, 5.9], fov: 36 }}
         dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }} fallback={fallback}
         onPointerMissed={() => onRegionSelect?.(null)}
         onCreated={({ gl }) => gl.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); setUse2D(true); }, { once: true })}>
         <BodyScene {...props} onHover={setHovered} />
       </Canvas></RenderBoundary>}
-      <div className="twin-tooltip" aria-live="polite">{focused ? <>{focused.replaceAll('_', ' ')} <strong>{Math.round((regions[focused]?.[day] ?? 1) * 100)}%</strong>
-        {compareRegions && <> / new plan <strong>{Math.round((compareRegions[focused]?.[day] ?? 1) * 100)}%</strong></>}</> : use2D ? '2D region view · Select a region below' : 'Drag to orbit · Scroll to zoom · Click a region'}</div>
+      <div className="twin-tooltip" aria-live="polite">{focused ? <>{(focused === 'pelvis' ? 'Hips' : focused === 'spine' ? 'Back' : focused.replaceAll('_', ' '))} <strong>{Math.round((regions[focused]?.[day] ?? 1) * 100)}/100</strong>
+        {compareRegions && <> / new routine <strong>{Math.round((compareRegions[focused]?.[day] ?? 1) * 100)}/100</strong></>}</> : use2D ? 'Select a body area for a closer look' : 'Drag to rotate · Scroll to zoom'}</div>
     </div>
-    <BodyLegend />
+    <details className="body-area-menu"><summary>Body areas & color key</summary><BodyLegend />
     <div className="regions body-region-controls" aria-label="Select a body region">{ids.map(id => <button key={id}
       aria-pressed={selectedRegion === id} style={{ borderColor: healthColor(regions[id]?.[day] ?? 1) }}
       onClick={() => onRegionSelect?.(selectedRegion === id ? null : id)}>{id.replaceAll('_', ' ')}</button>)}</div>
-    <small className="twin-note">Illustrative body regions · Health is a normalized simulation index, not a diagnostic measure</small>
+    <small className="twin-note">Colors and scores show an illustrative change index, not measured tissue percentages.</small></details>
   </div>;
 }

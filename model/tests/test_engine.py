@@ -139,3 +139,20 @@ def test_long_mission_performance_and_floors(case, params):
     assert perf_counter() - start < 0.3
     for tissue, key in [("hip_bmd", "hip_bmd_pct"), ("spine_bmd", "spine_bmd_pct"), ("leg_muscle", "leg_muscle_pct"), ("vo2max", "vo2max_pct")]:
         assert min(out["series"][key]) >= params["loss_floor_pct"][tissue]
+
+
+def test_profiles_do_not_invent_demographic_effects(case, params):
+    expected = forecast(case, params)["series"]
+    case["crew"].update(age=65, sex="F", fitness="low")
+    assert forecast(case, params)["series"] == expected
+
+
+def test_reference_fit_matches_observed_postflight_window(case, params):
+    study = json.loads((ROOT / "data/research/sprint_control.json").read_text())
+    case["mission"] = {"destination": "ISS", "duration_days": 165, "eva_days": []}
+    case["countermeasures"] = study["reference_countermeasures"]
+    out = forecast(case, params)
+    for item in study["outcomes"]:
+        key = {"hip_bmd": "hip_bmd_pct", "spine_bmd": "spine_bmd_pct", "leg_muscle": "leg_muscle_pct", "vo2max": "vo2max_pct"}[item["key"]]
+        observed_ratio = 100 * item["post_mean"] / item["pre_mean"]
+        assert abs(out["series"][key][165 + item["fit_offset_days"]] - observed_ratio) < .011

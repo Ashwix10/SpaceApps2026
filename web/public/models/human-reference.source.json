@@ -1,0 +1,15 @@
+{
+  "name": "MakeHuman hm08 base mesh",
+  "creator": "MakeHuman Community / Data Collection AB / Joel Palmius / Jonas Hauquier",
+  "source": "https://github.com/makehumancommunity/makehuman/blob/master/makehuman/data/3dobjs/base.obj",
+  "license": "CC0 1.0 Universal",
+  "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+  "license_statement": "https://github.com/makehumancommunity/makehuman/blob/master/LICENSE.md",
+  "source_sha256": "8e761e6624b8f54536409135d1636da63b32486a90d4897f84e121d144f6fb4c",
+  "asset_sha256": "ab5d51b2cb41342a63753b6d24a96d7ae1140f80338d53a0505605089477340a",
+  "modifications": "Removed rig/clothing helpers; kept surface and eye spheres; normalized height; triangulated and recomputed smooth normals; converted to GLB. No textures or personal scan data.",
+  "purpose": "Generic illustration. Not a NASA body scan, medical reconstruction or measurement of anatomy.",
+  "vertices": 13524,
+  "triangles": 27036,
+  "retrieved_on": "2026-11-15"
+}

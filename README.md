@@ -1,120 +1,87 @@
-# AstroTwin desktop
+# AstroTwin
 
-An astronaut-health digital twin research prototype. The primary app is now **Windows x64 desktop**, using Electron, the existing React dashboard and the existing Python model/API. API shapes and BodyTwin props are unchanged.
+A browser-based astronaut health research prototype. The interface is mostly black and white, with color reserved for meaningful changes. The React UI, Python engine, API, 3D body, comparison logic, timeline and source work are preserved from the earlier desktop version.
 
-Read [AstroTwin_Build_Plan.md](AstroTwin_Build_Plan.md) for the complete five-person plan, [CONTRACT.md](CONTRACT.md) for interfaces/runtime rules, and [VALIDATION.md](VALIDATION.md) for what has actually been checked. Shared integration branch: **default**.
+## Open the web app
 
-## Start the app on this computer
-
-You already have the Python and web dependencies if the earlier skeleton check passed. From CMD:
+From CMD in the repository folder:
 
 ```cmd
 cd /d "C:\Users\adity\OneDrive\Documents\SpaceApps\SpaceApps2026"
-npm install
 npm start
 ```
 
-The first command after cd installs Electron and the desktop build tools. Later launches need only **npm start**. It rebuilds the renderer, starts Electron, starts one private local backend and opens the dashboard once health is ready. Closing the app stops that backend. You do not start uvicorn or Vite separately for desktop use.
+Open **http://localhost:8000**. This command builds the UI and starts one Python service for both the page and /api. Press Ctrl+C to stop it. Close any previous server using port 8000 first; to use another port in CMD, run `set PORT=8001` before `npm start`.
 
-If downloads are blocked, run npm install from a normal terminal with network access. Root package-lock.json is generated on the first successful install; commit it and use npm ci thereafter. web/package-lock.json is already present.
+No Electron window or new dependency installation is needed for an existing working checkout.
 
-The forecast engine now implements loss, injury, countermeasures and recovery. A generic bone-rate anchor is now tied to a cited range; other coefficients remain explicitly classified development assumptions. Open Science & limits for offline source summaries. The body now renders nine interactive 3D regions with health colors, injury markers, comparison and a selectable 2D fallback. All workstreams are now implemented together in this workspace.
+## First-time setup
 
-## Setup on another developer's Windows computer
-
-Requires Python 3.11 and Node 20.19+ or supported newer LTS (Node 22 is used for desktop CI). Run from the repository root:
+Requires Python 3.11 and Node 20.19+ or a supported newer LTS. From the repository root:
 
 ```cmd
 py -3.11 -m venv .venv
-.venv\Scripts\python.exe -m pip install -e model -e explain -r api/requirements.txt
-npm install
+.venv\Scripts\python.exe -m pip install -e model -e explain -r api/requirements.lock
 npm --prefix web ci
 npm start
 ```
 
-Reuse an existing working .venv. If you intentionally use another Python environment, set ASTROTWIN_PYTHON to its absolute executable path.
+Reuse an existing working .venv. ASTROTWIN_PYTHON can point to another Python executable. Root npm installation is unnecessary for the web runtime; root desktop dependencies are retained only for optional legacy builds.
 
-## Build a Windows installer
+## Workspace and navigation
 
-On Windows x64, after developer setup:
+AstroTwin opens on a flight-management workspace. Choose **New flight**, give it a name and assign an astronaut. Its setup, body view and routine comparison stay together as one saved record.
 
-```cmd
-.venv\Scripts\python.exe -m pip install -r desktop/requirements-build.txt
-npm run dist:win
-```
+- **Workspace** (`#/`): create, search, open, rename, archive and restore flights.
+- **Astronauts** (`#/astronauts`): browse the four fictional starter profiles, add a simulation profile, edit its name/role and open or create its linked flights.
+- **Flight setup** (`#/mission`): edit the current flight's destination, duration, astronaut, routine and optional injury scenario.
+- **Body view** (`#/explore`): the human reference model and mission-to-recovery timeline for the current flight.
+- **Compare routines** (`#/compare`): a separately saved alternative routine for that flight, with optional detailed charts.
+- **Research & sources** (`#/research`): original measurements, citations, model assumptions and asset attribution.
 
-Expected output: **release/AstroTwin-0.2.0-x64-Setup.exe**. Version follows root package.json. For the unpacked app only, use npm run package:win; its executable is release/win-unpacked/AstroTwin.exe.
+Flights, profiles and the selected flight save in this browser's local storage, including across a refresh. Use the same browser and origin/port to reopen them. This is local browser persistence, not cloud accounts or shared-client storage. If saved data cannot be read, it is preserved instead of silently overwritten; the app reports when changes can only last for the session.
 
-The installer contains a PyInstaller one-folder Python backend, parameters/presets and the compiled UI. End users need no Python, Node, terminal or repository. Do not copy only the backend .exe out of its folder: it needs the accompanying libraries/resources.
+New profiles copy a fictional research template; entering a name does not create a medically validated personal twin. Profile name/role edits update linked flight labels while preserving research settings. Archiving keeps a flight's inputs and comparison available for restoration.
 
-A manual GitHub Actions workflow, **Build Windows desktop installer**, runs tests, builds the installer and uploads an artifact when the changes are pushed. This creates a downloadable build artifact; it does not publicly publish a release. Signing and auto-updates are later work.
+The sidebar keeps workspace navigation separate from the current flight. Back/Forward and reduced-motion page transitions remain available. Required human assets and research summaries are bundled locally. The MakeHuman surface is a generic CC0 illustration, not a NASA scan. Sources and model limits remain explicit.
 
-Before distributing, install on a second clean Windows machine, disconnect internet, run the demo, close/reopen and check process cleanup. See the complete acceptance list in the plan. An unsigned prototype may trigger Windows trust prompts.
+## Development
 
-## Dashboard controls
-
-Enable **Compare plans**, then select **Current plan** or **New plan** to edit their controls independently. **Copy current plan** starts an identical alternative; **Reset plans** restores the demo defaults. Four charts show both forecasts and their illustrative uncertainty ranges, with a shared day cursor and landing marker.
-
-Use **Play/Pause** and **1x/4x/16x** to advance the timeline. **Run demo** presents six stages from baseline through injury, comparison, recovery and the Mars scenario. Any manual interaction stops the guided demo. The destination remains a scenario label rather than a new gravity model.
-
-## Science and provenance
-
-**Science & limits** in the app shows the evidence classifications, limitations and bundled source summaries. The four crew presets are fictional. Read [docs/science.md](docs/science.md) for numeric settings and sources, and [docs/validation.md](docs/validation.md) for consistency results. Run `.venv\Scripts\python.exe docs/validate.py` to regenerate that report. These checks are not independent validation against astronaut outcomes.
-
-## Checks
-
-```cmd
-.venv\Scripts\python.exe -m pytest model api explain
-npm --prefix web test
-npm run build:web
-npm run test:desktop
-npm run smoke:desktop
-```
-
-The desktop smoke test launches the real local host and checks UI assets, session authentication, all seven API routes, offline template output and shutdown. It does not launch Electron or certify the installer.
-
-To check the backend copied into the packaged app, in CMD:
-
-```cmd
-set "ASTROTWIN_BACKEND_EXECUTABLE=%CD%\release\win-unpacked\resources\backend\astrotwin-backend.exe"
-npm run smoke:desktop
-set "ASTROTWIN_BACKEND_EXECUTABLE="
-```
-
-The existing Windows check script also checks the desktop host:
-
-```cmd
-powershell -ExecutionPolicy Bypass -File .\scripts\check.ps1
-```
-
-## Ownership and implementation
-
-| Owner | Files |
-| --- | --- |
-| Person 1 | model/ and generated forecast fixture |
-| Person 2 | api/, desktop/, scripts/, root config/plan/contract and CI |
-| Person 3 | web/src/body/ |
-| Person 4 | web/ except body |
-| Person 5 | data/, explain/, docs/ |
-
-desktop/main.cjs runs an isolated, sandboxed renderer with Node integration disabled. desktop/launcher.cjs owns one child process. desktop/backend.py binds an OS-assigned loopback port and serves the UI and /api from the same origin. A per-launch transport token stays in Electron's main process. A second app launch focuses the existing window.
-
-Core operation is offline. All required body/font/texture/decoder assets must be bundled locally. Template explanations must always work. ANTHROPIC_API_KEY and ANTHROPIC_MODEL, when used, are runtime configuration only; never bundle credentials. Persistent user records are outside this transition; do not write into installation resources.
-
-## Optional browser workflow
-
-For fast frontend work, keep the original development mode in two terminals:
+For hot reload, run these separately:
 
 ```cmd
 .venv\Scripts\python.exe -m uvicorn api.main:app --reload --port 8000
+npm run dev:web
 ```
+
+Open http://localhost:5173. The body sandbox remains `?sandbox=body`.
+
+`npm run build:web` builds for the same-origin server. For a separately hosted API, build web/ directly with VITE_API_URL set to the complete API base ending in /api, and configure WEB_ORIGIN on the API. No cloud deployment has been performed by this conversion.
+
+## Checks and model notes
+
+[CONTRACT.md](CONTRACT.md) records unchanged data interfaces and the browser startup. [VALIDATION.md](VALIDATION.md) records actual checks and limits. [docs/science.md](docs/science.md) classifies model assumptions; `.venv\Scripts\python.exe docs/validate.py` regenerates the consistency report.
+
+The earlier full test/check scripts remain available. UI work is checked with a production build and focused browser interaction instead of repeatedly running every suite.
+
+## Optional container delivery
 
 ```cmd
-npm --prefix web run dev
+docker build -f api/Dockerfile -t astrotwin .
+docker run --rm -p 8000:8000 astrotwin
 ```
 
-Open http://localhost:5173; Vite proxies /api to the developer backend. The API docs remain http://localhost:8000/docs in this mode. Person 3's sandbox is ?sandbox=body.
+The multi-stage recipe builds the renderer and serves UI/API together. The recipe is prepared for deployment, but its Docker build could not be run locally because the Docker engine is unavailable. No public deployment has been performed. See docs/RELEASE.md.
 
-VITE_API_URL is for optional browser deployment. Desktop build:web forces same-origin /api and VITE_USE_MOCKS=false; a user can still select clearly labeled mock mode. Never substitute mocks silently on a failed forecast.
+## Earlier desktop work
 
-The existing api/Dockerfile is retained for optional server development. Cloud hosting is no longer required for the desktop deliverable.
+The desktop/ folder, optional `npm run start:desktop` and installer recipes are preserved. They are no longer part of normal browser startup. The shared integration branch remains default.
+
+## Reproduce the research fit
+
+```cmd
+.venv\Scripts\python.exe scripts/calibrate.py
+.venv\Scripts\python.exe docs/validate.py
+```
+
+The study transcription is in data/research/sprint_control.json. The generated report distinguishes fitting its source endpoints from a separate historical challenge that the daily curve does not reproduce. See docs/science.md for the full method and limitations. Four source endpoints fitting to rounding does not imply prediction accuracy.

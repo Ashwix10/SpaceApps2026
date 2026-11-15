@@ -1,0 +1,101 @@
+{
+  "id": "english_2020_sprint",
+  "title": "High intensity training during spaceflight: results from the NASA Sprint Study",
+  "authors": "English et al.",
+  "year": 2020,
+  "doi": "10.1038/s41526-020-00111-x",
+  "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7434884/",
+  "reviewed_on": "2026-11-15",
+  "license": "CC BY 4.0",
+  "license_url": "https://creativecommons.org/licenses/by/4.0/",
+  "extraction": "Manual transcription of CON columns in Tables 1, 4, 5; numeric values unchanged. Ratios and daily rates are calculated by scripts/calibrate.py.",
+  "population": {
+    "group": "CON (standard ISS exercise)",
+    "n": 17,
+    "male": 14,
+    "female": 3,
+    "mission_days_mean": 165,
+    "mission_days_sd": 42
+  },
+  "protocol": "ARED resistance plus T2/CEVIS aerobic training, individualized, generally six days per week. The app uses a simplified 60/60-minute daily reference, not the study protocol.",
+  "reference_countermeasures": {
+    "resistance_min_per_day": 60,
+    "aerobic_min_per_day": 60,
+    "protein_g_per_kg": 1.2,
+    "calorie_pct": 100,
+    "bisphosphonate": false
+  },
+  "outcomes": [
+    {
+      "key": "hip_bmd",
+      "label": "Total hip bone density",
+      "table": 1,
+      "unit": "g/cm2",
+      "pre_mean": 1.054,
+      "pre_se": 0.026,
+      "post_mean": 1.023,
+      "post_se": 0.026,
+      "postflight_days": [
+        7,
+        14
+      ],
+      "fit_offset_days": 11
+    },
+    {
+      "key": "spine_bmd",
+      "label": "Lumbar spine bone density",
+      "table": 1,
+      "unit": "g/cm2",
+      "pre_mean": 1.088,
+      "pre_se": 0.024,
+      "post_mean": 1.068,
+      "post_se": 0.024,
+      "postflight_days": [
+        7,
+        14
+      ],
+      "fit_offset_days": 11
+    },
+    {
+      "key": "leg_muscle",
+      "label": "Leg lean mass (DXA)",
+      "table": 1,
+      "unit": "kg",
+      "pre_mean": 18.77,
+      "pre_se": 0.68,
+      "post_mean": 18.64,
+      "post_se": 0.68,
+      "postflight_days": [
+        7,
+        14
+      ],
+      "fit_offset_days": 11,
+      "note": "Leg lean mass change was not significant (time P=0.40). Lean tissue is a proxy, not isolated muscle mass or strength."
+    },
+    {
+      "key": "vo2max",
+      "label": "Relative peak oxygen uptake",
+      "table": 4,
+      "unit": "mL/kg/min",
+      "pre_mean": 41.8,
+      "pre_se": 1.6,
+      "post_mean": 39.7,
+      "post_se": 1.6,
+      "postflight_days": [
+        3,
+        3
+      ],
+      "fit_offset_days": 3,
+      "note": "VO2peak is measured; the legacy vo2max_pct JSON name is retained for compatibility."
+    }
+  ],
+  "limits": [
+    "Group means are not individual records; their ratio is not the mean paired percentage change.",
+    "SE describes the mean, not an individual prediction interval. Paired covariance is unavailable.",
+    "Postflight days 7\u201314 are represented by day 11 for the fit; this is a chosen approximation.",
+    "Recovery and exercise equations are assumed. Back-calculating landing values does not measure landing outcomes.",
+    "No randomized no-exercise arm; minutes-to-benefit and no-exercise scenarios are illustrative.",
+    "Daily interpolation, long missions and Moon/Mars conditions are not established by this cohort.",
+    "Sprint and the 2023 multisystem study may overlap; they are not independent validation sets."
+  ]
+}

@@ -1,6 +1,6 @@
 export const theme = {
-  bg: '#0B0F1A', panel: '#121829', border: '#23304A', text: '#E6EDF7',
-  muted: '#8A97AD', accent: '#4FD1FF', healthy: '#3B82F6', warning: '#F59E0B', danger: '#EF4444',
+  bg: '#0C0C0D', panel: '#141415', border: '#2A2A2C', text: '#F1F1F1',
+  muted: '#929294', accent: '#F1F1F1', healthy: '#DADADA', warning: '#B49B70', danger: '#B87575',
   font: 'Inter, ui-sans-serif, system-ui, sans-serif',
 } as const;
 // Named exports make the shared tokens convenient for Person 3.

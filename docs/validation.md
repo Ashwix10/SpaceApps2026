@@ -1,20 +1,20 @@
 # Model consistency report
 
-Parameter set: 0.2-bone-anchored-development
+Parameter set: 0.3-human-cohort-development
 
 This report checks internal consistency and provenance coverage. It is not independent scientific or clinical validation.
 
-All 49 numeric JSON settings are classified as derived assumptions or development assumptions.
+All 49 numeric JSON settings are classified with an explicit evidence status.
 
-The generic 30-day bone loss is 1.25%, matching the chosen 1.25% anchor by construction.
+Four daily rates now have a descriptive human-cohort fit. See calibration_report.json for endpoint residuals and the historical early-flight mismatch.
 
 | Scenario | Hip at landing | Spine at landing | Leg muscle at landing | Aerobic fitness at landing |
 | --- | ---: | ---: | ---: | ---: |
-| No countermeasures (neutral assumed personal factors) | 92.73% | 92.73% | 76.32% | 70.00% |
-| Standard plan, no injury | 95.75% | 95.75% | 89.51% | 84.12% |
-| Injury, current plan | 95.75% | 95.75% | 88.74% | 84.12% |
-| Injury, alternative plan | 98.56% | 98.56% | 92.15% | 80.56% |
+| No countermeasures (neutral assumed personal factors) | 94.49% | 96.54% | 97.74% | 87.72% |
+| Standard plan, no injury | 96.66% | 97.91% | 99.03% | 93.66% |
+| Injury, current plan | 96.66% | 97.91% | 98.95% | 93.66% |
+| Injury, alternative plan | 98.87% | 99.30% | 99.28% | 92.14% |
 
-No observed astronaut outcomes were loaded for these scenarios. There is no justified prediction-error percentage or pass/fail accuracy target yet.
-The broad source range does not identify separate hip/spine rates, isolate all countermeasure conditions, or validate this 180-day compounded trajectory.
-Muscle, aerobic, injury, recovery, personal-factor and risk calculations still need suitable endpoint-matched data before fitting or validating.
+Published group means are used by scripts/calibrate.py. These additional scenarios are simulations, not measured outcomes or independent validation.
+Site-specific references do not validate the exercise response equation, daily trajectory or individual outcomes.
+Injury, recovery, routine dose-response and status cutoffs still need validation; personal multipliers are neutral.

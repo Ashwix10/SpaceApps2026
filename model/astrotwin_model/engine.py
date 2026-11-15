@@ -5,7 +5,7 @@ from math import prod
 
 from .schemas import ForecastRequest
 
-MODEL_VERSION = "1.0-development"
+MODEL_VERSION = "1.1-cohort-development"
 TISSUES = ("hip_bmd", "spine_bmd", "leg_muscle", "vo2max")
 KEYS = dict(zip(TISSUES, ("hip_bmd_pct", "spine_bmd_pct", "leg_muscle_pct", "vo2max_pct")))
 

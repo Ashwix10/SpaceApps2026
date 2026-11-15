@@ -14,8 +14,9 @@ jobs:
         with:
           python-version: "3.11"
           cache: pip
-      - run: pip install -e model -e explain -r api/requirements.txt
+      - run: pip install -e model -e explain -r api/requirements.lock
       - run: pytest model api explain
+      - run: python scripts/calibrate.py
       - run: python docs/validate.py
       - name: Live API smoke test
         run: |
@@ -60,7 +61,7 @@ jobs:
           node-version: '22'
       - run: |
           python -m venv .venv
-          .venv/Scripts/python.exe -m pip install -e model -e explain -r api/requirements.txt
+          .venv/Scripts/python.exe -m pip install -e model -e explain -r api/requirements.lock
       - run: npm --prefix web ci
       - run: npm run build:web
       - run: npm run test:desktop

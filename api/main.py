@@ -1,4 +1,4 @@
-"""Contract-compatible API backed by the team's replaceable model stubs."""
+"""Contract-compatible API for the educational simulation."""
 from contextlib import asynccontextmanager
 from functools import lru_cache
 import json
@@ -103,8 +103,7 @@ def defaults(request: Request):
         "crew": request.app.state.crew[0], "mission": mission,
         "injury": {"type": "ankle_sprain", "severity": 2, "day": 40, "side": "left"},
         "countermeasures": measures,
-        "alternative": {"resistance_min_per_day": 90, "aerobic_min_per_day": 45,
-                        "protein_g_per_kg": 1.6, "calorie_pct": 100, "bisphosphonate": True},
+        "alternative": {**measures, "resistance_min_per_day": 30, "aerobic_min_per_day": 30},
     }}
 
 

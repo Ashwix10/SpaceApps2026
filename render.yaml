@@ -1,0 +1,11 @@
+# Optional Render Blueprint. Creating a service is a separate publishing action.
+services:
+  - type: web
+    name: astrotwin
+    runtime: docker
+    dockerfilePath: ./api/Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 8000

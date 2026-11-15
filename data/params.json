@@ -1,10 +1,10 @@
 {
-  "version": "0.2-bone-anchored-development",
+  "version": "0.3-human-cohort-development",
   "daily_loss": {
-    "hip_bmd": 0.00041920484931,
-    "spine_bmd": 0.00041920484931,
-    "leg_muscle": 0.0015,
-    "vo2max": 0.002
+    "hip_bmd": 0.00031476828742549307,
+    "spine_bmd": 0.00019558464542157592,
+    "leg_muscle": 0.0001271660785442827,
+    "vo2max": 0.0007277651214891989
   },
   "loss_floor_pct": {
     "hip_bmd": 80,
@@ -63,15 +63,15 @@
     "vo2max": 14
   },
   "person_factors": {
-    "age_per_decade_over_40": 0.08,
+    "age_per_decade_over_40": 0,
     "fitness": {
-      "low": 1.15,
-      "average": 1.0,
-      "high": 0.9
+      "low": 1,
+      "average": 1,
+      "high": 1
     },
     "sex": {
-      "F": 1.05,
-      "M": 1.0
+      "F": 1,
+      "M": 1
     }
   },
   "uncertainty_pct": 0.2,

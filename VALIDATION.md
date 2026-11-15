@@ -91,3 +91,42 @@ Expected installer: release/AstroTwin-0.2.0-x64-Setup.exe. This is an expected b
 The current environment reports a Starlette/httpx test-client deprecation warning, a pytest cache permission warning and a renderer bundle-size warning. All listed tests passed despite those messages. Packaging/GUI checks remain separate.
 
 Technical basis: Electron's documented isolated/sandboxed renderer, electron-builder v26 extraResources/NSIS configuration, and PyInstaller one-folder resource handling. Links are in the revised plan.
+
+## 2026-11-15: simple routines and NASA reference observations
+
+- Production TypeScript/Vite build passed. Existing large-bundle advisory remains.
+- One focused real-browser flow passed: three exercise choices, no visible sliders in the routine panel, a successful live no-exercise comparison, preserved food/medication, visible NASA aggregate findings, and no horizontal overflow in the narrow-screen panel. No page errors occurred.
+- NASA sources were checked directly for bone loss, average ISS fitness losses and exercise context. `data/nasa_observations.json` contains published summary values, not raw astronaut health records. No model calibration or independent scientific validation is claimed in this step.
+- Routine UI changes preserve existing API schemas and simulation equations. Broad test suites were not repeated for these presentation/provenance changes.
+
+## 2026-11-15: human-cohort reference and browser completion
+
+This entry supersedes earlier generic-bone-only scientific status. It describes an educational release, not clinical readiness.
+
+- `scripts/calibrate.py`: four matching source endpoints reconstructed within rounding at their postflight test offsets. The report includes a separate historical day-15 cardio mismatch (model 99.46% versus reported mean 83%, CI 78–87%). This is not independent prediction validation; no accuracy percentage is claimed.
+- `docs/validate.py`: provenance coverage and four scenario shapes passed. Fixtures regenerated with the current model/parameters.
+- Python model/API/explanation checks: 34 passed in 1.19 seconds. Nonblocking warnings: Starlette's httpx TestClient deprecation and a denied pytest cache directory. Tests were not repeated unnecessarily.
+- Frontend checks: six passed, including comparison direction, equality and trade-off wording.
+- Production TypeScript/Vite build passed. The primary entry chunk is approximately 264 kB uncompressed, charts approximately 405 kB and the lazy 3D chunk approximately 941 kB. Vite still warns about the 3D chunk's size; no claim of a measured network-performance benchmark is made.
+- One comprehensive Chrome flow passed against the real UI/API: local startup, no initial injury, lazy chart loading, comparison and its plain summary, preservation of food/medication, human-shaped 2D keyboard selection, four charts, source table, Escape dismissal, Moon/Mars scope notice, 390px layout and retry after a deliberately aborted request without losing edited inputs. No page errors occurred. The desktop overview was visually inspected.
+- Live smoke passed all seven API routes on port 18767. This was a temporary local preview, not public hosting.
+- Local Docker engine unavailable; container build, Linux clean-host install and public HTTPS release were not verified. Docker/Render recipes are supplied in api/Dockerfile and render.yaml. See docs/RELEASE.md.
+- No prospective user study, clinical assessment, independent individual-data validation, operational clearance or competition score is claimed.
+
+## 2026-11-15: five-page interface remodel and imported human asset
+
+- Replaced the single dashboard/drawer flow with opening, Mission, Explore, Compare and Research pages, each with a hash URL and layout. Framer Motion transitions respect reduced motion. Browser navigation retains in-memory mission settings; reload intentionally initializes the default scenario.
+- Replaced the active procedural mannequin with the official MakeHuman hm08 base surface (CC0). A 650,056-byte local GLB has 13,524 vertices and 27,036 triangles. The source header, license links, hashes and conversion method are retained. It is a generic reference, not a NASA scan. Mesh thickness is no longer distorted by simulated health.
+- Production TypeScript/Vite build passed. Nonblocking advisories remain for the lazy 3D chunk size and ignored Framer Motion use-client directives in this Vite browser build.
+- Six frontend checks passed. Model/API/explanation suites were not repeated because scientific equations, parameters and API shapes were unchanged in this remodel.
+- Focused real-browser flow verified entry, all four app pages, mission duration and crew edits, launch-to-recovery timeline, comparison choices, four optional charts, original research table, Back/Forward and mission-state retention. Baseline food changes were checked to carry into the alternative, and deliberately different food settings were visibly labeled. No browser error logs were observed.
+- Visually inspected the imported model on the opening page, exploration view and both comparison bodies. Verified 390px layouts without horizontal page overflow, three routine choices and no visible routine sliders. Camera distance adapts to keep both A-pose references inside a narrow comparison view.
+- Research source data, fit limitations, independent-project wording and lack of clinical validation remain explicit. The remodel does not constitute scientific validation, usability-study evidence, a hosted release or a guaranteed competition score.
+
+## Workspace management update
+
+- Production TypeScript/Vite build passed; existing lazy-3D bundle advisory remains. A malformed CSS grouping found during visual QA was corrected and the built interface was visually rechecked.
+- Eight frontend checks passed, including new persistence/isolation/archive/restore behavior and rejection of damaged or unsupported workspace records. Scientific parameters and API shapes were unchanged; the broad Python suites were not repeated.
+- A real-browser flow created two named flights with different astronauts, destinations, durations and routines; verified independent settings after switching and reloading; archived/restored and renamed a flight; added/edited a custom simulation profile; and created a linked flight for it. The custom-profile flight reopened into the working body/timeline view after refresh. No browser error logs were observed.
+- Verified a 390px workspace without horizontal document overflow and visually inspected desktop and mobile management layouts.
+- Saved data is local to the browser origin, not cloud or multi-user storage. Storage failures and unreadable data are explicitly reported; unreadable saved content is not automatically replaced. No clinical capability or additional scientific validation is claimed by these management features.

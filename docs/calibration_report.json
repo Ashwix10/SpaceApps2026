@@ -1,0 +1,57 @@
+{
+  "status": "Descriptive aggregate fit; no independent predictive validation",
+  "source": "10.1038/s41526-020-00111-x",
+  "reference_mission_days": 165,
+  "reference_group_n": 17,
+  "calibration_rows": [
+    {
+      "outcome": "Total hip bone density",
+      "postflight_day": 11,
+      "observed_ratio_pct": 97.0588,
+      "model_pct": 97.06,
+      "fit_residual_percentage_points": 0.0012
+    },
+    {
+      "outcome": "Lumbar spine bone density",
+      "postflight_day": 11,
+      "observed_ratio_pct": 98.1618,
+      "model_pct": 98.16,
+      "fit_residual_percentage_points": -0.0018
+    },
+    {
+      "outcome": "Leg lean mass (DXA)",
+      "postflight_day": 11,
+      "observed_ratio_pct": 99.3074,
+      "model_pct": 99.31,
+      "fit_residual_percentage_points": 0.0026
+    },
+    {
+      "outcome": "Relative peak oxygen uptake",
+      "postflight_day": 3,
+      "observed_ratio_pct": 94.9761,
+      "model_pct": 94.98,
+      "fit_residual_percentage_points": 0.0039
+    }
+  ],
+  "external_challenge": {
+    "source": "https://ntrs.nasa.gov/citations/20140003748",
+    "measurement": "Early-flight VO2peak (day 15), different historical cohort",
+    "observed_pct": 83,
+    "reported_95_ci_pct": [
+      78,
+      87
+    ],
+    "model_pct": 99.46,
+    "outside_reported_mean_ci": true,
+    "interpretation": "The smooth model misses early-flight adaptation. Cohort/protocol differences also prevent an individual-accuracy claim."
+  },
+  "limits": [
+    "Group means are not individual records; their ratio is not the mean paired percentage change.",
+    "SE describes the mean, not an individual prediction interval. Paired covariance is unavailable.",
+    "Postflight days 7\u201314 are represented by day 11 for the fit; this is a chosen approximation.",
+    "Recovery and exercise equations are assumed. Back-calculating landing values does not measure landing outcomes.",
+    "No randomized no-exercise arm; minutes-to-benefit and no-exercise scenarios are illustrative.",
+    "Daily interpolation, long missions and Moon/Mars conditions are not established by this cohort.",
+    "Sprint and the 2023 multisystem study may overlap; they are not independent validation sets."
+  ]
+}

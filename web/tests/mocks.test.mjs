@@ -56,3 +56,42 @@ test('shared body colors match contract thresholds and clamp outliers', () => {
   assert.equal(healthColor(-1).toUpperCase(), theme.danger);
   assert.equal(healthColor(2).toUpperCase(), theme.healthy);
 });
+
+const { comparisonSummary } = load('../src/comparison.ts');
+test('comparison summary uses landing, preserves direction and names tradeoffs', () => {
+  const baseline = mockForecast(mockDefaults.demo);
+  const alternative = structuredClone(baseline);
+  const landing = baseline.landing_day;
+  alternative.series.hip_bmd_pct[landing] += 2;
+  alternative.series.vo2max_pct[landing] -= 3;
+  const summary = comparisonSummary({ baseline, alternative });
+  assert.match(summary, /cardio fitness: 3.0 points lower/);
+  assert.match(summary, /opposite direction/);
+  assert.match(comparisonSummary({ baseline, alternative: baseline }), /similar estimates/);
+});
+
+const { emptyWorkspace, createFlight, updateFlight, archiveFlight, parseWorkspace } = load('../src/workspace.ts');
+test('saved flights keep independent settings through reopening, archive and restore', () => {
+  const seed = structuredClone(mockDefaults.demo);
+  delete seed.alternative;
+  const first = createFlight('Station research', seed);
+  const second = createFlight('Second mission', seed);
+  let workspace = { ...emptyWorkspace(), astronauts: [seed.crew], flights: [first, second], activeFlightId: first.id };
+  workspace = updateFlight(workspace, first.id, { request: { ...first.request, mission: { ...first.request.mission, duration_days: 150 } } });
+  workspace = parseWorkspace(JSON.stringify(workspace));
+  assert.equal(workspace.flights[0].request.mission.duration_days, 150);
+  assert.equal(workspace.flights[1].request.mission.duration_days, 180);
+  assert.equal(seed.mission.duration_days, 180);
+  workspace = archiveFlight(workspace, first.id, true);
+  assert.equal(workspace.activeFlightId, null);
+  workspace = archiveFlight(workspace, first.id, false);
+  assert.equal(workspace.flights[0].archived, false);
+  assert.equal(workspace.flights[0].request.mission.duration_days, 150);
+  assert.equal(workspace.flights[0].alternative.protein_g_per_kg, seed.countermeasures.protein_g_per_kg);
+});
+test('damaged or unsupported saved workspaces are rejected instead of silently replaced', () => {
+  assert.throws(() => parseWorkspace('{broken'));
+  assert.throws(() => parseWorkspace(JSON.stringify({ ...emptyWorkspace(), version: 99 })));
+  assert.throws(() => parseWorkspace(JSON.stringify({ ...emptyWorkspace(), activeFlightId: 'missing' })));
+  assert.deepEqual(parseWorkspace(null), emptyWorkspace());
+});

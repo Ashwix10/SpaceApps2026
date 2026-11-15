@@ -1,34 +1,166 @@
 {
-  "reviewed_on": "2026-11-14",
-  "params_version": "0.2-bone-anchored-development",
-  "overall_status": "Development model; not clinically validated",
-  "bone_anchor": { "monthly_loss_fraction": 0.0125, "month_days": 30, "reported_range_pct": [1.0, 1.5], "source_id": "nasa_bone" },
+  "reviewed_on": "2026-11-15",
+  "params_version": "0.3-human-cohort-development",
+  "overall_status": "Published human-cohort reference fit; educational simulation, not clinical or independently validated",
+  "bone_anchor": {
+    "monthly_loss_fraction": 0.0125,
+    "month_days": 30,
+    "reported_range_pct": [
+      1.0,
+      1.5
+    ],
+    "source_id": "nasa_bone",
+    "model_use": "Historical context only; superseded as the active calibration by the site-specific Sprint CON data."
+  },
   "sources": [
-    { "id": "nasa_bone", "title": "NASA: Risk of Spaceflight-Induced Bone Changes", "url": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/", "finding": "NASA reports a broad average bone-density decline of 1–1.5% per month over four-to-six-month missions. This is not a site-specific fit or a uniform untreated cohort." },
-    { "id": "nasa_muscle", "title": "NASA: Muscle Risk", "url": "https://www.nasa.gov/directorates/esdmd/hhp/muscle-risk/", "finding": "NASA reports that adherent ISS crews with suitable exercise systems can return with small average muscle losses. Our fixed muscle-loss rate has not been fitted to those observations." },
-    { "id": "nasa_exercise", "title": "NASA: OCHMO-TB-031 Exercise Overview", "url": "https://www.nasa.gov/ochmo-tb-031-exercise-overview-2/", "finding": "This brief reviews exercise, medication and reconditioning evidence. It does not establish our numerical treatment effects, recovery half-lives or risk-score formula." },
-    { "id": "nasa_fracture", "title": "NASA Human Research Roadmap: Fracture 1", "url": "https://humanresearchroadmap.nasa.gov/gaps/gap.aspx?i=557", "finding": "The closed gap's rationale does not establish a large clinical effect on fracture healing. Much of the earlier evidence used animal models. Our injury slowdowns are hypothetical, not measured human healing factors." }
+    {
+      "id": "nasa_bone",
+      "title": "NASA: Risk of Spaceflight-Induced Bone Changes",
+      "url": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+      "finding": "NASA reports a broad average bone-density decline of 1\u20131.5% per month over four-to-six-month missions. This is not a site-specific fit or a uniform untreated cohort."
+    },
+    {
+      "id": "nasa_muscle",
+      "title": "NASA: Muscle Risk",
+      "url": "https://www.nasa.gov/directorates/esdmd/hhp/muscle-risk/",
+      "finding": "NASA reports that adherent ISS crews with suitable exercise systems can return with small average muscle losses. Our fixed muscle-loss rate has not been fitted to those observations."
+    },
+    {
+      "id": "nasa_exercise",
+      "title": "NASA: OCHMO-TB-031 Exercise Overview",
+      "url": "https://www.nasa.gov/ochmo-tb-031-exercise-overview-2/",
+      "finding": "This brief reviews exercise, medication and reconditioning evidence. It does not establish our numerical treatment effects, recovery half-lives or risk-score formula."
+    },
+    {
+      "id": "nasa_fracture",
+      "title": "NASA Human Research Roadmap: Fracture 1",
+      "url": "https://humanresearchroadmap.nasa.gov/gaps/gap.aspx?i=557",
+      "finding": "The closed gap's rationale does not establish a large clinical effect on fracture healing. Much of the earlier evidence used animal models. Our injury slowdowns are hypothetical, not measured human healing factors."
+    },
+    {
+      "id": "sprint_2020",
+      "title": "English et al. (2020): NASA Sprint study",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7434884/",
+      "finding": "Tables 1, 4 and 5 provide site-specific bone, leg lean-mass and relative peak-oxygen measurements for a standard-exercise group of 17 people, with mean mission duration 165 days. The app fits these aggregate endpoints under explicit assumptions."
+    },
+    {
+      "id": "multisystem_2023",
+      "title": "Scott et al. (2023): Multisystem exercise outcomes",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9898566/",
+      "finding": "A larger human cohort shows substantial outcome variation. Some participants overlap with earlier work, so this is context, not independent validation. Individual data require a NASA archive request."
+    },
+    {
+      "id": "moore_2014",
+      "title": "Moore et al. (2014): Peak oxygen uptake",
+      "url": "https://ntrs.nasa.gov/citations/20140003748",
+      "finding": "A separate historical cohort had early-flight cardio changes the current smooth curve does not reproduce. This documented mismatch limits interpretation of daily predictions."
+    }
   ],
   "parameters": [
-    { "path": "daily_loss.hip_bmd", "label": "Hip bone base rate", "status": "derived assumption", "source_ids": ["nasa_bone"], "note": "Uses the chosen 1.25% midpoint of a broad published range, converted to a compounded daily rate; not a measured hip-specific coefficient." },
-    { "path": "daily_loss.spine_bmd", "label": "Spine bone base rate", "status": "derived assumption", "source_ids": ["nasa_bone"], "note": "Uses the same generic anchor as hip bone because separate site-specific calibration is unavailable." },
-    { "path": "daily_loss.leg_muscle", "label": "Muscle loss", "status": "development assumption", "source_ids": ["nasa_muscle"], "note": "Illustrative loss curve; muscle mass is not interchangeable with strength or operational performance." },
-    { "path": "daily_loss.vo2max", "label": "Aerobic fitness loss", "status": "development assumption", "source_ids": ["nasa_exercise"], "note": "A fixed exponential rate has not been fitted to astronaut aerobic measurements." },
-    { "path": "loss_floor_pct", "label": "Minimum retained tissue", "status": "development assumption", "source_ids": [], "note": "Simulation floors prevent indefinite decay; they are not established physiological lower bounds." },
-    { "path": "countermeasure_max_effect", "label": "Exercise, nutrition and medication effects", "status": "development assumption", "source_ids": ["nasa_exercise"], "note": "Related evidence supports studying countermeasures, but does not validate these exact efficacy fractions or our way of combining them." },
-    { "path": "injury", "label": "Injury loss and healing", "status": "development assumption", "source_ids": ["nasa_fracture"], "note": "All severity durations, local loss multipliers and microgravity slowdowns are hypothetical scenario settings, not validated return-to-duty estimates." },
-    { "path": "recovery_half_life_days", "label": "Postflight recovery", "status": "development assumption", "source_ids": ["nasa_exercise"], "note": "Exponential recovery is illustrative. Recovery depends on the person, tissue and rehabilitation; these half-lives are not fitted." },
-    { "path": "person_factors", "label": "Age, fitness and sex adjustments", "status": "development assumption", "source_ids": [], "note": "These illustrative modifiers do not establish individual susceptibility or demographic differences. All crew presets and baselines are fictional." },
-    { "path": "uncertainty_pct", "label": "Shaded forecast ranges", "status": "development assumption", "source_ids": [], "note": "Sensitivity envelopes around the scenario, not statistical confidence intervals." },
-    { "path": "risk_thresholds", "label": "Colored risk flags", "status": "development assumption", "source_ids": ["nasa_exercise"], "note": "Heuristic display cutoffs, not NASA operational standards, calibrated probabilities, or clearance for medication, EVA or landing." }
+    {
+      "path": "daily_loss.hip_bmd",
+      "label": "Hip bone density",
+      "status": "human-cohort derived assumption",
+      "source_ids": [
+        "sprint_2020"
+      ],
+      "note": "Reproduces a ratio of CON group means at its postflight test window. Daily shape, reference routine and recovery correction are assumptions; this is a descriptive fit, not predictive validation."
+    },
+    {
+      "path": "daily_loss.spine_bmd",
+      "label": "Back bone density",
+      "status": "human-cohort derived assumption",
+      "source_ids": [
+        "sprint_2020"
+      ],
+      "note": "Reproduces a ratio of CON group means at its postflight test window. Daily shape, reference routine and recovery correction are assumptions; this is a descriptive fit, not predictive validation."
+    },
+    {
+      "path": "daily_loss.leg_muscle",
+      "label": "Leg lean tissue proxy",
+      "status": "human-cohort derived assumption",
+      "source_ids": [
+        "sprint_2020"
+      ],
+      "note": "Reproduces a ratio of CON group means at its postflight test window. Daily shape, reference routine and recovery correction are assumptions; this is a descriptive fit, not predictive validation. DXA lean tissue is not isolated muscle or strength; its reported change was not significant."
+    },
+    {
+      "path": "daily_loss.vo2max",
+      "label": "Peak aerobic fitness",
+      "status": "human-cohort derived assumption",
+      "source_ids": [
+        "sprint_2020"
+      ],
+      "note": "Reproduces a ratio of CON group means at its postflight test window. Daily shape, reference routine and recovery correction are assumptions; this is a descriptive fit, not predictive validation."
+    },
+    {
+      "path": "loss_floor_pct",
+      "label": "Minimum retained tissue",
+      "status": "development assumption",
+      "source_ids": [],
+      "note": "Simulation floors prevent indefinite decay; they are not established physiological lower bounds."
+    },
+    {
+      "path": "countermeasure_max_effect",
+      "label": "Exercise, nutrition and medication effects",
+      "status": "development assumption",
+      "source_ids": [
+        "nasa_exercise"
+      ],
+      "note": "Related evidence supports studying countermeasures, but does not validate these exact efficacy fractions or our way of combining them."
+    },
+    {
+      "path": "injury",
+      "label": "Injury loss and healing",
+      "status": "development assumption",
+      "source_ids": [
+        "nasa_fracture"
+      ],
+      "note": "All severity durations, local loss multipliers and microgravity slowdowns are hypothetical scenario settings, not validated return-to-duty estimates."
+    },
+    {
+      "path": "recovery_half_life_days",
+      "label": "Postflight recovery",
+      "status": "development assumption",
+      "source_ids": [
+        "nasa_exercise"
+      ],
+      "note": "Exponential recovery is illustrative. Recovery depends on the person, tissue and rehabilitation; these half-lives are not fitted."
+    },
+    {
+      "path": "person_factors",
+      "label": "Age, fitness and sex adjustments",
+      "status": "disabled / neutral",
+      "source_ids": [],
+      "note": "Age, sex and fitness multipliers are neutral. Aggregate data do not establish individual susceptibility; crew profiles do not produce invented demographic effects."
+    },
+    {
+      "path": "uncertainty_pct",
+      "label": "Shaded forecast ranges",
+      "status": "development assumption",
+      "source_ids": [],
+      "note": "Sensitivity envelopes around the scenario, not statistical confidence intervals."
+    },
+    {
+      "path": "risk_thresholds",
+      "label": "Colored risk flags",
+      "status": "development assumption",
+      "source_ids": [
+        "nasa_exercise"
+      ],
+      "note": "Heuristic display cutoffs, not NASA operational standards, calibrated probabilities, or clearance for medication, EVA or landing."
+    }
   ],
   "limits": [
-    "Only the generic bone base-rate anchor is tied numerically to a published range. Other coefficients remain assumptions.",
-    "A midpoint within a reported range is an analyst choice, not a new observation or independent validation.",
-    "Matching a range used to choose a parameter is a consistency check; it does not establish prediction accuracy.",
-    "The same rates currently apply to ISS, Moon and Mars. Forecasts beyond the cited four-to-six-month context are extrapolations.",
-    "The regional body colors, injury-day dip and thickness changes are illustrative mappings, not anatomical measurements.",
-    "Absolute preflight baselines are displayed, but most predictions are percentages adjusted by assumed personal factors.",
-    "No astronaut-level dataset, clinical outcomes, medical-device validation or independent held-out validation is included."
-  ]
+    "Four endpoint rates are fitted to published group means under the reference routine, not to individual astronaut records.",
+    "A fit to its own source values is not independent validation or a measure of prediction accuracy.",
+    "Postflight measurement timing is retained; bone/lean scans at days 7\u201314 use day 11 as a chosen fit approximation.",
+    "Exercise dose, food, medication effects, injury curves and recovery half-lives remain scenario assumptions. More minutes need not mean better real-world outcomes.",
+    "Daily cardio curves miss early-flight adaptation reported in a separate NASA cohort.",
+    "Leg lean tissue is not strength; no measured fracture probability or operational clearance is produced.",
+    "All destinations use ISS-based rates. Short/long missions and Moon/Mars are extrapolations.",
+    "Shaded ranges and body colors are illustrative sensitivity displays, not confidence intervals or anatomy measurements.",
+    "No clinical validation, user study or independent individual-level predictive validation has been completed."
+  ],
+  "observation_file": "nasa_observations.json"
 }

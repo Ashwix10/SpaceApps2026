@@ -1,5 +1,5 @@
 # AstroTwin CONTRACT.md
-Version 1.1 (desktop transition). This file is the source of truth. Only Person 2 edits it, after team agreement.
+Version 1.5 (saved flight workspace, cohort-reference semantics). This file is the source of truth. Only Person 2 edits it, after team agreement.
 If code and this file disagree, this file wins.
 
 Execution update: implementation is now consolidated into this workspace at the user's request. The ownership labels below describe work areas and no longer restrict this assistant to one folder. API shapes and desktop runtime rules are unchanged.
@@ -35,24 +35,18 @@ astrotwin/
 Never edit a folder you do not own. Ask the owner.
 
 ## 2. Running locally
-Primary deliverable: an installable Windows x64 desktop app using Electron, the React UI and a bundled Python service.
-Development baseline: Python 3.11, Node 20.19+ (or supported newer LTS). Keep the web developer workflow for UI work.
-Install: pip install -e model -e explain -r api/requirements.txt
-Desktop dependencies: npm install (repo root), then npm --prefix web ci.
-Desktop start: npm start (repo root). Builds the renderer, launches Electron, starts its local backend and opens the UI after health is ready.
-Desktop tests: npm run test:desktop and npm run smoke:desktop (after npm run build:web).
-Windows packaging: pip install -r desktop/requirements-build.txt, then npm run dist:win (repo root).
-Output: release/AstroTwin-0.2.0-x64-Setup.exe (version follows root package.json). End users need no Python or Node installation.
-The Python host serves the compiled renderer and /api on one dynamically allocated 127.0.0.1 port.
-The desktop renderer always uses /api on its own origin. VITE_API_URL is for optional browser deployment only.
-VITE_USE_MOCKS is false for desktop builds; choosing mocks must be explicit and visibly labeled.
-The desktop shell starts and stops the backend. Team members must not start a second backend for npm start.
-Optional browser development:
-API: uvicorn api.main:app --reload --port 8000   (run from repo root)
-Web: cd web && npm install && npm run dev   (port 5173)
-Vite proxies /api to http://localhost:8000. In production, VITE_API_URL sets the API base URL.
-VITE_USE_MOCKS=true makes the web app use src/mocks instead of the API.
-OpenAPI docs: http://localhost:8000/docs
+Primary deliverable: a browser-based React app backed by the existing Python API/model.
+Development baseline: Python 3.11 and Node 20.19+ (or a supported newer LTS).
+Install Python: pip install -e model -e explain -r api/requirements.txt
+Install renderer dependencies: npm --prefix web ci
+Start from repo root: npm start. It builds the renderer, starts api.serve, and serves UI plus /api at http://localhost:8000.
+No Electron installation or desktop window is required. PORT overrides the local server port. ASTROTWIN_PYTHON selects a Python executable; otherwise the project .venv is used.
+The browser entrypoint serves web/dist and the seven existing /api routes from the same origin. The desktop session-token header is not used in browser mode.
+For rapid UI development: run uvicorn api.main:app --reload --port 8000 and npm --prefix web run dev in separate terminals. Vite proxies /api to the local API.
+For a separate hosted API, build web/ directly with VITE_API_URL set to its /api URL and set WEB_ORIGIN on the API.
+VITE_USE_MOCKS=true selects explicitly labeled sample data. Mock data is never a silent fallback.
+The earlier desktop shell/packaging files are retained as optional legacy support. npm run start:desktop opens it when its dependencies are installed.
+OpenAPI docs remain /docs on the running API. Application routes and JSON shapes are unchanged.
 
 ## 3. Conventions
 - Time is whole days. Day 0 is launch. landing_day = mission.duration_days.
@@ -174,10 +168,14 @@ eva_fitness uses the lower of leg_muscle_pct and vo2max_pct at the first eva day
 landing_fitness uses the lower of leg_muscle_pct and vo2max_pct at landing_day.
 At or below "red" = red, at or below "yellow" = yellow, otherwise green.
 
-## 8. Design tokens (web/src/theme.ts, owned by Person 4, used by Person 3)
-bg #0B0F1A, panel #121829, border #23304A, text #E6EDF7, muted #8A97AD, accent #4FD1FF
-healthy #3B82F6, warning #F59E0B, danger #EF4444. Font: bundled Inter if available, otherwise the local system sans-serif. No runtime font download.
-healthColor(h: number): string blends healthy at 1.0, warning at 0.85, danger at 0.75 and below.
+## 8. Design tokens and interface
+bg #0C0C0D, panel #141415, border #2A2A2C, text #F1F1F1, muted #929294, accent #F1F1F1.
+healthy #DADADA, warning #B49B70, danger #B87575. System sans-serif, with local Inter when available. No font downloads.
+healthColor retains the same numerical cutoffs: healthy at 1.0, warning at 0.85, danger at 0.75 and below. Only the palette changed.
+The default screen shows a compact mission summary, three status indicators, body and timeline. A single primary action opens plan comparison.
+Mission editing, daily routines, detailed charts/explanations and sources live in dismissible side panels. Native dialogs provide keyboard focus trapping and Escape-to-close.
+Use everyday language in the UI: daily routine, strength training, cardio fitness, before the mission, estimated range, bone medication. Keep wire keys unchanged.
+Detailed scientific assumptions, numerical risk scores and sample-data controls remain available without crowding the default screen.
 
 ## 9. BodyTwin component (web/src/body/index.ts, owned by Person 3)
 export function BodyTwin(props: {
@@ -208,7 +206,7 @@ alternative: { resistance_min_per_day: 90, aerobic_min_per_day: 45, protein_g_pe
 Integration branch: default. Branches: model, api, body, web, data and personal branches such as aditya. Small pull requests into default; Person 2 merges.
 CI must pass: pytest model api (plus explain tests when present), npm test and npm run build in web, and desktop lifecycle/smoke tests.
 
-## 13. Desktop runtime and packaging
+## 13. Optional legacy desktop runtime and packaging
 Owner: Person 2. No changes to the section 4 JSON shapes, the seven API routes, Python model/explain interfaces or BodyTwin props are required by desktop packaging.
 desktop/main.cjs owns the Electron window. Node integration is off, context isolation and sandboxing are on. No renderer filesystem or subprocess privileges.
 desktop/launcher.cjs starts exactly one backend child, waits for authenticated /api/health, and stops only its own child on exit. A second app launch focuses the first window.
@@ -224,3 +222,31 @@ Core forecasts, presets, body assets and template explanations work offline. AI 
 Windows x64 is the first release target. macOS/Linux installers, signing, auto-updates and app-store distribution are later work.
 Package smoke check: set ASTROTWIN_BACKEND_EXECUTABLE to the frozen astrotwin-backend executable and run npm run smoke:desktop.
 Release acceptance: install on a clean Windows machine without Python/Node, open, run demo offline, close, reopen, and confirm no leftover backend or install-path writes. A successful source test alone is not installer acceptance.
+
+## 14. Browser delivery
+scripts/start-web.cjs owns the managed Python child and prints the local URL; api/serve.py serves the compiled UI and API. Closing the npm process stops its managed backend.
+Browser mode uses ordinary same-origin HTTP requests, without Electron or a per-launch desktop token. The default local host binds only to 127.0.0.1.
+The multi-stage api/Dockerfile builds the React assets and serves both UI and API from one Python container for optional deployment. A public deployment is a separate action.
+Keep all existing forecast, comparison, explanation, body, timeline and provenance capabilities. The visual redesign changes their presentation, not their contracts or science assumptions.
+
+## 15. Evidence and display semantics (1.3)
+
+JSON shapes are unchanged. The active parameter set is 0.3-human-cohort-development. Four rates are descriptively fitted to Sprint CON group means under an explicitly assumed reference routine and recovery correction. The legacy `leg_muscle_pct` denotes a DXA leg lean-tissue proxy; `vo2max_pct` references relative VO2peak. They are not strength or a clinical fitness assessment. All personal-factor multipliers are neutral.
+
+Legacy risk keys/scores remain API compatibility fields; UI labels describe modeled change and do not claim fracture probability or readiness. Region values are an illustrative change index, not the same percentage as a tissue series. Band widths remain sensitivity assumptions. Model outputs must be distinguished from source measurements. See docs/science.md and data/evidence.json.
+
+## 16. Browser remodel (1.4)
+
+The five client routes are hash URLs: #/, #/mission, #/explore, #/compare, #/research. They share one API/model and in-memory mission state. Back/Forward switches layouts without resetting inputs; a full reload reinitializes the default fictional mission. No account service is introduced.
+
+The active 3D renderer loads local /models/human-reference.glb, a modified CC0 MakeHuman hm08 surface. See its adjacent source manifest and NOTICE. Region coloring and BodyTwin props are unchanged; the mesh remains anatomically static. A 2D fallback remains available. All API request/response shapes and research parameters are unchanged by this UI remodel.
+
+## 17. Flight workspace (1.5)
+
+The initial #/ route is a management workspace; #/astronauts adds the profile directory. The existing mission/explore/compare routes operate on the selected saved flight. They retain the same scientific API payloads. No new server storage or authentication endpoints are introduced.
+
+Browser localStorage key `astrotwin.workspace.v1` stores `{version:1, astronauts:CrewProfile[], flights:Flight[], activeFlightId:string|null}`. A Flight has a UUID, name, createdAt/updatedAt ISO timestamps, archived boolean, request:ForecastRequest and alternative:Countermeasures. Each record owns independent inputs and comparisons. Archiving the selected record clears activeFlightId; restoration preserves settings. The saved workspace is validated before use. Unreadable/unsupported data is not overwritten automatically; failed writes are reported as session-only state.
+
+Four starter profiles are loaded from the API only for an empty directory. Custom profiles clone a fictional template and edit name/role; these are simulation profiles, not newly measured human data. Profile label updates propagate to linked requests without inventing new physiological calibration.
+
+This section supersedes section 16's reload-reset behavior. Reload restores saved records on the same browser origin. Model equations, parameters, API shapes, 3D attribution and scientific limitations are unchanged.

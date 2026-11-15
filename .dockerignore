@@ -1,0 +1,13 @@
+.git
+.venv
+**/node_modules
+**/__pycache__
+**/*.egg-info
+.pytest_cache
+.npm-cache
+.backend-build
+.backend-dist
+release
+web/dist
+.env
+.env.*

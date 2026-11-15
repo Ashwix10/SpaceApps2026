@@ -16,8 +16,8 @@ def explain(forecast: dict, comparison: dict | None, crew_name: str, audience: s
         provisional = any(word in forecast["meta"]["params_version"] for word in ("placeholder", "development"))
         prefix = "Development estimates" if provisional else "Research simulation"
         text = (f"{prefix} for {name}: at landing on day {day}, lowest bone density is {bone:.2f}%, "
-                f"leg muscle {muscle:.2f}%, and aerobic fitness {aerobic:.2f}% of baseline. "
-                f"Landing-fitness flag: {risk}.")
+                f"leg lean tissue {muscle:.2f}%, and aerobic fitness {aerobic:.2f}% of baseline. "
+                f"Model change label: {risk}.")
         if comparison:
             alt = comparison["alternative"]["series"]
             base = comparison["baseline"]["series"]
@@ -27,7 +27,7 @@ def explain(forecast: dict, comparison: dict | None, crew_name: str, audience: s
         if audience == "surgeon":
             text += " Review uncertainty and model assumptions before interpreting these simulated flags."
         else:
-            text += " Review the comparison. Discuss the simulated plan with the mission team."
+            text += " Review the comparison. These are educational estimates, not personal health predictions."
         return {"text": text, "source": "template"}
     except Exception:
         return {"text": "A forecast summary is unavailable. Review the forecast inputs and model assumptions with the mission team.", "source": "template"}

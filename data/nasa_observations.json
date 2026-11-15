@@ -1,0 +1,37 @@
+{
+  "reviewed_on": "2026-11-15",
+  "kind": "Published NASA aggregate summaries; not astronaut-level records or a fitted training dataset",
+  "observations": [
+    {
+      "id": "bone_monthly",
+      "label": "Bone density lost per month",
+      "range": [
+        1,
+        1.5
+      ],
+      "unit": "%",
+      "display": "1â€“1.5%",
+      "context": "NASA reports this broad average for four-to-six-month missions. It is not a separate estimate for each bone or exercise routine.",
+      "url": "https://www.nasa.gov/reference/risk-of-spaceflight-induced-bone-changes/",
+      "model_use": "Historical context only. Active hip/back rates now reference site-specific human study measurements."
+    },
+    {
+      "id": "fitness_postflight",
+      "label": "Average strength and cardio fitness loss",
+      "range": [
+        10,
+        12
+      ],
+      "unit": "%",
+      "display": "10â€“12%",
+      "context": "NASA summarizes ISS mission data. Outcomes vary by person and measurement. This is a post-mission change, not a monthly rate or a muscle-mass measurement.",
+      "url": "https://www.nasa.gov/reference/risk-of-reduced-cardiorespiratory-and-musculoskeletal-fitness/",
+      "model_use": "Reference only. Not used to fit daily muscle or cardio rates; mission length and individual records are unavailable in this summary."
+    }
+  ],
+  "exercise_context": {
+    "reported_hours_per_day": 2,
+    "url": "https://www.nasa.gov/missions/station/iss-research/astronaut-exercise/",
+    "note": "NASA describes crews averaging about two hours of daily exercise. Our equal strength/cardio split and shorter routine are illustrative choices, not an astronaut prescription. A separate NASA risk summary describes 1.5 hours of training six to seven days per week; these accounts are not a single standardized protocol."
+  }
+}
