@@ -6,10 +6,9 @@
   "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
   "license_statement": "https://github.com/makehumancommunity/makehuman/blob/master/LICENSE.md",
   "source_sha256": "8e761e6624b8f54536409135d1636da63b32486a90d4897f84e121d144f6fb4c",
-  "asset_sha256": "ab5d51b2cb41342a63753b6d24a96d7ae1140f80338d53a0505605089477340a",
-  "modifications": "Removed rig/clothing helpers; kept surface and eye spheres; normalized height; triangulated and recomputed smooth normals; converted to GLB. No textures or personal scan data.",
+  "asset_sha256": "c3feb38c433ce666e7ee8310150104dab51ab2f8e56ccaa081842505e5384580",
+  "modifications": "Removed rig/clothing helpers; kept surface and eye spheres; normalized height; triangulated and recomputed smooth normals; converted to GLB. No textures or personal scan data. Static male illustration edits: broader shoulders, narrower hips, flatter chest, pectoral/abdominal contour and jaw shaping. These are AstroTwin edits, not official MakeHuman morph targets or measured anatomy.",
   "purpose": "Generic illustration. Not a NASA body scan, medical reconstruction or measurement of anatomy.",
   "vertices": 13524,
-  "triangles": 27036,
-  "retrieved_on": "2026-11-15"
+  "triangles": 27036
 }

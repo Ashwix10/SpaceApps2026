@@ -11,7 +11,7 @@ function HumanBody({ regions, day, injuredRegion, selectedRegion, onRegionSelect
   onHover: (region: RegionId | null) => void;
 }) {
   const mesh = useRef<Mesh>(null);
-  const { scene } = useGLTF('/models/human-reference.glb');
+  const { scene } = useGLTF('/models/human-reference.glb?reference=male-v1');
   const [hovered, setHovered] = useState<RegionId | null>(null);
   const surface = useMemo(() => {
     let source: BufferGeometry | undefined;
@@ -70,7 +70,7 @@ function HumanBody({ regions, day, injuredRegion, selectedRegion, onRegionSelect
     onClick={event => { if (event.delta > 5) return; event.stopPropagation(); const id = hitRegion(event); onRegionSelect?.(selectedRegion === id ? null : id); }}
     onPointerMove={event => { event.stopPropagation(); const id = hitRegion(event); setHovered(id); onHover(id); }}
     onPointerOut={() => { setHovered(null); onHover(null); }}>
-    <meshStandardMaterial vertexColors roughness={0.46} metalness={0.08} emissive="#FFFFFF" emissiveIntensity={0.015} />
+    <meshStandardMaterial vertexColors roughness={0.64} metalness={0.025} emissive="#FFFFFF" emissiveIntensity={0.008} />
   </mesh>;
 }
 
@@ -86,10 +86,10 @@ export function BodyScene(props: BodyTwinProps & { onHover: (region: RegionId | 
   }, [camera, fittedDistance]);
   const bodies = props.compareRegions ? [props.regions, props.compareRegions] : [props.regions];
   return <>
-    <ambientLight intensity={0.85} />
-    <directionalLight position={[-3, 5, 5]} intensity={1.8} color="#F3F1ED" />
-    <directionalLight position={[4, 2, 3]} intensity={0.7} color="#E2E5EB" />
-    <directionalLight position={[0, 4, -4]} intensity={1.1} color="#FFFFFF" />
+    <ambientLight intensity={0.6} />
+    <directionalLight position={[-3, 5, 5]} intensity={2.1} color="#FFFFFF" />
+    <directionalLight position={[4, 2, 3]} intensity={0.5} color="#FFFFFF" />
+    <directionalLight position={[0, 4, -4]} intensity={1.35} color="#FFFFFF" />
     {bodies.map((regions, i) => <group key={i} position={[bodies.length === 1 ? 0 : i ? 1.05 : -1.05, 0, 0]} scale={bodies.length === 1 ? 1 : 0.9}>
       <HumanBody {...props} regions={regions} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.009, 0.06]}>

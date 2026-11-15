@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { Icon } from './Visuals';
 import { PlanControls } from './DashboardPanels';
 import { createApi } from './api';
 import { SciencePanel } from './SciencePanel';
@@ -23,7 +24,7 @@ const names: Record<SeriesKey, string> = { hip_bmd_pct: 'Hip bone', spine_bmd_pc
 function Brand() {
   return <a className="brand" href={pageHref('home')} aria-label="AstroTwin home"><svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="9" stroke="currentColor"/><ellipse cx="16" cy="16" rx="15" ry="5.5" transform="rotate(-38 16 16)" stroke="currentColor"/></svg><span>AstroTwin<span className="brand-dot">.</span></span></a>;
 }
-function Arrow() { return <span aria-hidden="true">↗</span>; }
+function Arrow() { return <Icon name="arrow" size={16}/>; }
 function PageFrame({ page, children }: { page: Page; children: ReactNode }) {
   const reduce = useReducedMotion();
   return <motion.main id="main-content" className={`page page-${page}`} initial={{ opacity: 0, y: reduce ? 0 : 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduce ? 0 : -7 }} transition={{ duration: reduce ? 0 : .24, ease: [.22, 1, .36, 1] }}
@@ -128,9 +129,9 @@ export function App() {
   const noFlight = <div className="workspace-empty no-flight"><h2>Choose a flight to begin.</h2><p>Open a saved flight or create a new one from your workspace.</p><a className="button button-outline" href={pageHref('home')}>Go to workspace <Arrow/></a></div>;
 
   return <div className="workspace-shell">
-    <aside className="app-sidebar"><Brand/><div className="sidebar-section"><span>WORKSPACE</span><nav aria-label="Workspace navigation">{(['home','astronauts','research'] as Page[]).map(route=><a key={route} href={pageHref(route)} aria-current={page===route ? 'page' : undefined}><span className="sidebar-symbol" aria-hidden="true">{route==='home' ? '▦' : route==='astronauts' ? '◉' : '≡'}</span>{titles[route]}</a>)}</nav></div>
-      {activeFlight && <div className="sidebar-section current-flight-section"><span>CURRENT FLIGHT</span><strong>{activeFlight.name}</strong><nav aria-label="Flight navigation">{(['mission','explore','compare'] as Page[]).map(route=><a key={route} href={pageHref(route)} aria-current={page===route ? 'page' : undefined}>{titles[route]}</a>)}</nav></div>}
-      <div className="sidebar-bottom"><span className="workspace-monogram">AT</span><div><strong>Local workspace</strong><span>{storageError ? 'Session only' : 'Saved on this browser'}</span></div></div>
+    <aside className="app-sidebar"><Brand/><div className="sidebar-section"><span>WORKSPACE</span><nav aria-label="Workspace navigation">{(['home','astronauts','research'] as Page[]).map(route=><a key={route} href={pageHref(route)} aria-current={page===route ? 'page' : undefined}><Icon name={route}/>{titles[route]}</a>)}</nav></div>
+      {activeFlight && <div className="sidebar-section current-flight-section"><span>CURRENT FLIGHT</span><strong>{activeFlight.name}</strong><nav aria-label="Flight navigation">{(['mission','explore','compare'] as Page[]).map(route=><a key={route} href={pageHref(route)} aria-current={page===route ? 'page' : undefined}><Icon name={route}/>{titles[route]}</a>)}</nav></div>}
+      <div className="sidebar-mission-note"><Icon name="orbit" size={24}/><strong>Made for discovery.</strong><p>Human health,<br/>beyond Earth.</p><a href="#/research">Explore the science <Icon name="arrow" size={14}/></a></div><div className="sidebar-bottom"><span className="workspace-monogram">AT</span><div><strong>Local workspace</strong><span>{storageError ? 'Session only' : 'Saved on this browser'}</span></div></div>
     </aside><div className="site workbench">
     <a className="skip-link" href="#main-content" onClick={e=>{e.preventDefault();document.querySelector<HTMLElement>('main h1')?.focus();}}>Skip to content</a>
     <header className="workbench-header"><div><a href={pageHref('home')}>Workspace</a><span>/</span>{activeFlight && ['mission','explore','compare'].includes(page) && <><strong>{activeFlight.name}</strong><span>/</span></>}<strong>{page==='home' ? 'Overview' : titles[page]}</strong></div><span className="save-state"><i/>{storageError ? 'Not saved' : 'Saved locally'}</span></header>

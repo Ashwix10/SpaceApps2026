@@ -12,6 +12,7 @@ import struct
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument('source', type=Path)
+parser.add_argument('--male', action='store_true', help='Prepare a static male-proportioned reference illustration')
 args = parser.parse_args()
 raw = args.source.read_bytes()
 vertices = []
@@ -30,6 +31,29 @@ low = min(vertices[i][1] for i in used)
 high = max(vertices[i][1] for i in used)
 scale = 3.2 / (high-low)
 points = [(vertices[i][0]*scale, (vertices[i][1]-low)*scale, (vertices[i][2]-.3)*scale) for i in used]
+if args.male:
+    def bell(value, center, width):
+        return math.exp(-((value-center)/width)**2)
+    shaped = []
+    for x,y,z in points:
+        # Fixed art-direction edits to the CC0 mesh, never driven by forecast values.
+        shoulder = bell(y, 2.44, .29)
+        hip = bell(y, 1.70, .29)
+        x *= 1 + .22*shoulder - .13*hip + .08*bell(y, 1.98, .20)
+        torso = math.exp(-(abs(x)/.34)**8)
+        front = max(0, min(1, (z-.02)/.12))
+        breast = bell(abs(x), .17, .17)*bell(y, 2.17, .14)
+        z -= .105*breast*front*torso
+        # Broad pectorals, a firmer abdomen and a slightly stronger jaw silhouette.
+        z += .025*bell(abs(x), .16, .17)*bell(y, 2.30, .14)*front*torso
+        z += .012*bell(abs(x), .08, .07)*bell(y, 1.99, .18)*front*torso
+        # Replace the base mesh's rounded breast volume with a broad chest plane.
+        chest_blend = math.exp(-((y-2.30)/.31)**4)*torso*max(0,min(1,(z+.02)/.06))
+        chest_surface = .16*math.sqrt(max(.15, 1-(x/.43)**2)) + .012*bell(y,2.30,.18)
+        z = z*(1-chest_blend) + chest_surface*chest_blend
+        x *= 1+.10*bell(y, 2.89, .07)+.08*bell(y, 2.70, .10)
+        shaped.append((x,y,z))
+    points = shaped
 triangles = []
 for face in faces:
     for n in range(1, len(face)-1):
@@ -49,7 +73,7 @@ pos = struct.pack('<'+'f'*len(points)*3, *(v for point in points for v in point)
 norm = struct.pack('<'+'f'*len(points)*3, *(v for normal in normals for v in normal))
 indices = struct.pack('<'+'I'*len(triangles), *triangles)
 binary = pos+norm+indices
-asset = {'asset': {'version':'2.0','generator':'AstroTwin: MakeHuman CC0 surface conversion','copyright':'MakeHuman Community, CC0 1.0'},
+asset = {'asset': {'version':'2.0','generator':'AstroTwin: MakeHuman CC0 male reference' if args.male else 'AstroTwin: MakeHuman CC0 surface conversion','copyright':'MakeHuman Community, CC0 1.0'},
  'scene':0,'scenes':[{'nodes':[0]}], 'nodes':[{'mesh':0,'name':'MakeHuman reference surface'}],
  'meshes':[{'primitives':[{'attributes':{'POSITION':0,'NORMAL':1},'indices':2,'material':0}]}],
  'materials':[{'name':'Porcelain','pbrMetallicRoughness':{'baseColorFactor':[.7,.7,.7,1],'metallicFactor':.05,'roughnessFactor':.45}}],
@@ -67,7 +91,7 @@ notice = {'name':'MakeHuman hm08 base mesh','creator':'MakeHuman Community / Dat
  'license':'CC0 1.0 Universal','license_url':'https://creativecommons.org/publicdomain/zero/1.0/',
  'license_statement':'https://github.com/makehumancommunity/makehuman/blob/master/LICENSE.md',
  'source_sha256':hashlib.sha256(raw).hexdigest(),'asset_sha256':hashlib.sha256(glb).hexdigest(),
- 'modifications':'Removed rig/clothing helpers; kept surface and eye spheres; normalized height; triangulated and recomputed smooth normals; converted to GLB. No textures or personal scan data.',
+ 'modifications':'Removed rig/clothing helpers; kept surface and eye spheres; normalized height; triangulated and recomputed smooth normals; converted to GLB. No textures or personal scan data.' + (' Static male illustration edits: broader shoulders, narrower hips, flatter chest, pectoral/abdominal contour and jaw shaping. These are AstroTwin edits, not official MakeHuman morph targets or measured anatomy.' if args.male else ''),
  'purpose':'Generic illustration. Not a NASA body scan, medical reconstruction or measurement of anatomy.',
  'vertices':len(points),'triangles':len(triangles)//3}
 (out/'human-reference.source.json').write_text(json.dumps(notice,indent=2)+'\n',encoding='utf-8')
