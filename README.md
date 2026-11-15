@@ -1,6 +1,6 @@
 # AstroTwin
 
-A browser-based astronaut health research prototype. The interface is mostly black and white, with color reserved for meaningful changes. The React UI, Python engine, API, 3D body, comparison logic, timeline and source work are preserved from the earlier desktop version.
+A browser-based astronaut health research prototype with an orbital workspace, visual crew and flight planning, interactive anatomy, measured research data, and a routine optimizer that evaluates the existing forecast model.
 
 ## Open the web app
 
@@ -43,7 +43,7 @@ Flights, profiles and the selected flight save in this browser's local storage, 
 
 New profiles copy a fictional research template; entering a name does not create a medically validated personal twin. Profile name/role edits update linked flight labels while preserving research settings. Archiving keeps a flight's inputs and comparison available for restoration.
 
-The sidebar keeps workspace navigation separate from the current flight. Back/Forward and reduced-motion page transitions remain available. Required human assets and research summaries are bundled locally. The MakeHuman surface is a generic CC0 illustration, not a NASA scan. Sources and model limits remain explicit.
+The navigation rail separates the workspace from the current flight. Icon labels appear on hover and keyboard focus, with persistent labels on small screens. Back/Forward and reduced-motion page transitions remain available. Crew portraits, planet artwork, human assets and research summaries are bundled locally. The MakeHuman surface is a generic CC0 illustration, not a NASA scan. Methodology and presentation notes are in [docs/science.md](docs/science.md) and [docs/INTERFACE.md](docs/INTERFACE.md).
 
 ## Development
 

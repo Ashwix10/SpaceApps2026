@@ -29,7 +29,15 @@ The reference scenario uses 60 minutes strength plus 60 minutes cardio, protein 
 
 Exercise effects, protein/calorie response, medication efficacy, injury multipliers, recovery half-lives, long-term floors, body-region mappings and display cutoffs are assumptions. data/evidence.json classifies every parameter path. Percentage curves begin at 100; shaded bands are sensitivity envelopes, not statistical confidence or personal prediction intervals. Reported study SEs are not reused as individual variation because paired covariance and raw measurements are unavailable.
 
-The same rates apply to ISS, Moon and Mars. Gravity transitions, radiation, equipment failures, workload, fluid shifts and individual health are not modeled. Extrapolation to short missions or beyond a typical ISS stay is labeled. The 3D thickness and color index are illustrations, not measured anatomy. Status colors indicate modeled changes, not safety or fitness for duty.
+The same rates apply to ISS, Moon and Mars. Gravity transitions, radiation, equipment failures, workload, fluid shifts and individual health are not modeled. Extrapolation to short missions or beyond a typical ISS stay is labeled. The body is reference anatomy, not a scan. Anatomy colors identify systems: gold hip bone, blue spine, cyan muscle and coral cardio. Changes in surface intensity use the regional display index, not a measured tissue percentage or safety assessment.
+
+## Reading the interface
+
+The research explorer plots the two transcribed group means in their original measurement units, with whiskers spanning plus/minus one reported standard error. It does not interpolate daily observations between them. The plot axis is fitted to those endpoints and labeled in native units; it is not anchored at zero. The derived percentage shown is `(post_mean / pre_mean - 1) * 100`, not a paired individual change. The mission duration is a group mean with standard deviation, separate from the measurement standard errors. Scan timing remains R+7 to R+14; aerobic testing remains R+3.
+
+Forecast charts show `series - 100`, labeled change from preflight baseline in percent. Zero is preflight. Shaded sensitivity envelopes are transformed with the same subtraction. They are not the standard errors in the research plot. Body metric cards convert a supplied profile baseline using `baseline * series / 100`; these are scenario values. A region with no corresponding tissue series shows a regional display index, explicitly separate from measured units. The underlying region index combines or transforms series and can include a hypothetical local injury effect.
+
+The research body maps only the four bundled outcome types to their corresponding anatomical regions. Arm and head/neck selections explicitly show that the selected region has no measurement in this dataset; they do not borrow a hip or leg value. Applied routine and test routine labels distinguish the flight's saved exercise settings from the comparison being explored. Injury rings are separate annotations, not a reinterpretation of the anatomy colors.
 
 ## Evidence needed for stronger claims
 

@@ -1,0 +1,45 @@
+AstroTwin visual assets
+Generated 2026-11-15 using the built-in image_gen tool.
+
+crew-portraits.png
+Four fictional portraits in a 2 by 2 contact sheet. The application crops the
+sheet with CSS background-position; the source image is not modified.
+Clockwise from top left: Maya, Luis, Sam, Avery.
+
+Generation prompt:
+Use case: photorealistic-natural. Asset type: a single photographic crew
+portrait contact sheet for a fictional space mission web app. Create exactly
+four equal rectangular head-and-shoulders portrait panels in a precise seamless
+2 by 2 grid, no gaps, all heads centered within their own quadrants with
+generous hair and shoulder space. Top-left: fictional Black woman age 42, short
+natural coiled dark hair, composed warm expression. Top-right: fictional Latin
+American man age 35, short dark hair, subtle stubble, approachable expression.
+Bottom-left: fictional East Asian woman age 46, short straight black bob hair,
+quietly confident expression. Bottom-right: fictional Black man age 61 with
+cropped gray hair and short gray beard, experienced friendly expression. Every
+subject wears an understated navy space crew flight jacket with no patches,
+emblems, logos, flags, lettering or insignia. Consistent dark ink blue studio
+background, realistic natural skin and individual facial features, subtle cool
+cyan edge light and gentle warm key light, cinematic but credible photographic
+realism. Straight-on studio crew portraits with similar framing and head scale.
+No helmets. No text, no captions, no grid borders, no other objects. The output
+is one square contact sheet with each panel occupying exactly one quarter.
+
+earth.png
+Decorative generated Earth globe with transparency. This is an illustration,
+not satellite data or a map used in the simulation.
+
+Generation prompt:
+Use case: scientific-educational. Asset type: a single realistic Earth globe,
+transparent PNG cutout for an immersive space workspace interface. Primary
+request: a beautiful high-resolution photographic Earth floating on a
+transparent background, full globe visible with generous padding on every edge.
+Earth occupies about 84 percent of the square canvas. View of Atlantic Ocean,
+North and South America on the left, Europe and Africa toward center-right.
+Realistic cyan blue oceans, subtle warm sand deserts, green land and detailed
+white cloud systems. Sunlight from upper left, with lower-right hemisphere
+gently fading into the night side and a fine electric blue atmospheric rim
+along the sunlit edge. True scientific photographic texture rather than
+stylized illustration. No stars, no background, no lens flare, no diagram, no
+rings, no text, no labels, no icons, no other planets. Opaque planet on a
+genuinely transparent surrounding background.

@@ -1,0 +1,16 @@
+.destination-planner .destination-orbits .destination-route{stroke:#B9CBF3;stroke-width:.45;stroke-dasharray:1;stroke-dashoffset:0;animation:destination-route-draw .7s cubic-bezier(.18,.65,.25,1) both}
+.destination-planner .is-dragging .destination-route{stroke:#E0C38B;stroke-dasharray:.035 .016;animation:none}
+.destination-planner .is-drop-target .destination-object{border-color:#E0C38B;background:#E0C38B0B}
+.destination-planner .is-drop-target .destination-label{color:#F0D9AA}
+.mission-preset-section{margin-top:-4px}
+.mission-preset-section .mission-block-heading{margin-bottom:11px}
+.mission-preset-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.mission-preset-grid button{display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0;padding:13px 14px;border:1px solid #B5C5E71B;border-radius:6px;background:#B6C7E803;text-align:left;color:#9DAEC7;cursor:pointer;transition:background .18s,border-color .18s}
+.mission-preset-grid button>span{font-size:11px;line-height:1.4}
+.mission-preset-grid strong{font-size:19px;line-height:1;font-weight:450;color:#C1CDE4;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mission-preset-grid small{font-size:10px;color:#788AA5;margin-left:3px}
+.mission-preset-grid button:hover,.mission-preset-grid button[aria-pressed=true]{border-color:#BDCAF15C;background:#BDCAF10B;color:#DAE2F1}
+.mission-preset-grid button:focus-visible{outline:2px solid #C9DAF6;outline-offset:3px}
+@keyframes destination-route-draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@media(max-width:480px){.mission-preset-grid{gap:7px}.mission-preset-grid button{padding:11px 10px;gap:8px}.mission-preset-grid button>span{font-size:10px}.mission-preset-grid strong{font-size:18px}.mission-preset-section .mission-value{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.destination-planner .destination-orbits .destination-route{animation:none}.mission-preset-grid button{transition:none}}
