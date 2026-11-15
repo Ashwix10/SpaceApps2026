@@ -1,3 +1,11 @@
+# Current milestone: science provenance and generic bone anchor
+
+Added data/evidence.json, a Science & limits view with offline source summaries, four explicitly fictional crew presets, and docs/science.md. The bone base-rate anchor is the chosen 1.25% per 30 days midpoint of a cited broad range, converted to a compounded daily rate; separate hip/spine calibration is not claimed. Other numerical settings remain development assumptions. The source/model version mismatch is displayed when applicable.
+
+The focused provenance/anchor check verifies every numeric parameter is classified, checks version consistency and source IDs, and validates four scenario shapes. It produces docs/validation.md. Matching the selected range is by construction and does not establish predictive accuracy. The renderer build and a focused browser check passed, including the science view, source summaries, four crew options and version-mismatch warning. The offline explanation retains its development label. No broad regression suite was rerun for this milestone.
+
+Earlier milestone records follow.
+
 # Current milestone: dashboard controls and guided demo
 
 Added independent current/new plan editors, copy/reset actions, risk-score differences, four tissue comparison charts with uncertainty envelopes and day/landing cursors, timeline playback at 1x/4x/16x, audience selection, and a six-step guided demo. Manual interaction stops the demo; changed inputs invalidate old explanations. Destination assumptions remain visibly disclosed.

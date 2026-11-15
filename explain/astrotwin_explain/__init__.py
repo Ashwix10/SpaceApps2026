@@ -13,7 +13,8 @@ def explain(forecast: dict, comparison: dict | None, crew_name: str, audience: s
         aerobic = series["vo2max_pct"][day]
         risk = forecast["risks"]["landing_fitness"]["level"]
         name = str(crew_name).strip()[:80] or "Crew member"
-        prefix = "Development estimates" if "placeholder" in forecast["meta"]["params_version"] else "Research simulation"
+        provisional = any(word in forecast["meta"]["params_version"] for word in ("placeholder", "development"))
+        prefix = "Development estimates" if provisional else "Research simulation"
         text = (f"{prefix} for {name}: at landing on day {day}, lowest bone density is {bone:.2f}%, "
                 f"leg muscle {muscle:.2f}%, and aerobic fitness {aerobic:.2f}% of baseline. "
                 f"Landing-fitness flag: {risk}.")

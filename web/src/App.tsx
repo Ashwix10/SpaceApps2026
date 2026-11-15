@@ -3,6 +3,7 @@ import { ForecastCharts, PlanControls, tissueLabels } from './DashboardPanels';
 import './dashboard.css';
 import { createApi } from './api';
 import { BodyTwin } from './body';
+import { SciencePanel } from './SciencePanel';
 import type { CompareResponse, Countermeasures, CrewProfile, Defaults, ForecastRequest, ForecastResponse, HealthResponse, InjuryInfo, InjuryType, RegionId, SeriesKey } from './types';
 
 const labels = tissueLabels;
@@ -42,6 +43,7 @@ export function App() {
   const [demoStep, setDemoStep] = useState<number | null>(null);
   const [demoRun, setDemoRun] = useState(0);
   const [demoComplete, setDemoComplete] = useState(false);
+  const [scienceOpen, setScienceOpen] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -119,13 +121,14 @@ export function App() {
 
   return <main onClick={interruptDemo} onKeyDown={interruptDemo}>
     <header><div><span className="eyebrow">ASTROTWIN / MISSION HEALTH</span><h1>Your crew. Their next horizon.</h1></div>
-      <div className="dashboard-actions"><button data-demo-control disabled={!defaults || (busy && demoStep === null)} onClick={() => {
+      <div className="dashboard-actions"><button aria-expanded={scienceOpen} onClick={() => setScienceOpen(v => !v)}>Science & limits</button><button data-demo-control disabled={!defaults || (busy && demoStep === null)} onClick={() => {
         if (demoStep !== null) { setDemoStep(null); setPlaying(false); }
         else { setDemoComplete(false); setDemoRun(v => v + 1); setDemoStep(0); }
       }}>{demoStep === null ? 'Run demo' : 'Stop demo'}</button>
       <label className="mode"><input type="checkbox" checked={mocks} onChange={e => setMocks(e.target.checked)} /> Mock mode</label></div></header>
     <div className="notice"><span className="dot" /> {mocks ? 'LOCAL MOCKS' : health ? 'API CONNECTED' : 'API DISCONNECTED'} · {health?.model_version ?? 'Waiting for server'}
       <span>Development parameters · Not clinically validated</span></div>
+    {scienceOpen && <SciencePanel activeParamsVersion={health?.params_version} />}
     {error && <div role="alert" className="error">{error} <button onClick={() => setRetry(x => x + 1)}>Retry connection</button></div>}
     <p className="forecast-updating" role="status">{busy ? 'Updating forecast…' : forecast ? 'Forecast ready' : 'Connecting to local engine…'}</p>
     {(demoStep !== null || demoComplete) && <div className="demo-banner" role="status"><div>

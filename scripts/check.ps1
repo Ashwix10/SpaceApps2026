@@ -22,6 +22,8 @@ try {
     }
     & $pythonPath -m pytest model api explain
     if ($LASTEXITCODE -ne 0) { throw 'Python tests failed.' }
+    & $pythonPath docs/validate.py
+    if ($LASTEXITCODE -ne 0) { throw 'Parameter provenance or bone-anchor check failed.' }
     Push-Location web
     try {
         & npm.cmd test

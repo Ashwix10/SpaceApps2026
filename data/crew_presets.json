@@ -7,6 +7,56 @@
     "mass_kg": 64,
     "fitness": "high",
     "role": "Commander",
-    "baseline": { "hip_bmd_g_cm2": 1.02, "spine_bmd_g_cm2": 1.08, "leg_lean_mass_kg": 16.5, "vo2max_ml_kg_min": 44 }
+    "baseline": {
+      "hip_bmd_g_cm2": 1.02,
+      "spine_bmd_g_cm2": 1.08,
+      "leg_lean_mass_kg": 16.5,
+      "vo2max_ml_kg_min": 44
+    }
+  },
+  {
+    "id": "crew_luis",
+    "name": "Luis Ortega",
+    "age": 35,
+    "sex": "M",
+    "mass_kg": 72,
+    "fitness": "high",
+    "role": "Flight Engineer",
+    "baseline": {
+      "hip_bmd_g_cm2": 1.1,
+      "spine_bmd_g_cm2": 1.15,
+      "leg_lean_mass_kg": 19,
+      "vo2max_ml_kg_min": 48
+    }
+  },
+  {
+    "id": "crew_avery",
+    "name": "Avery Chen",
+    "age": 46,
+    "sex": "F",
+    "mass_kg": 69,
+    "fitness": "average",
+    "role": "Mission Specialist",
+    "baseline": {
+      "hip_bmd_g_cm2": 1.01,
+      "spine_bmd_g_cm2": 1.05,
+      "leg_lean_mass_kg": 17,
+      "vo2max_ml_kg_min": 37
+    }
+  },
+  {
+    "id": "crew_sam",
+    "name": "Sam Mensah",
+    "age": 61,
+    "sex": "M",
+    "mass_kg": 86,
+    "fitness": "low",
+    "role": "Private Astronaut",
+    "baseline": {
+      "hip_bmd_g_cm2": 0.96,
+      "spine_bmd_g_cm2": 1.02,
+      "leg_lean_mass_kg": 18,
+      "vo2max_ml_kg_min": 28
+    }
   }
 ]

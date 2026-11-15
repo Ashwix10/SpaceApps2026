@@ -18,7 +18,7 @@ The first command after cd installs Electron and the desktop build tools. Later 
 
 If downloads are blocked, run npm install from a normal terminal with network access. Root package-lock.json is generated on the first successful install; commit it and use npm ci thereafter. web/package-lock.json is already present.
 
-The forecast engine now implements loss, injury, countermeasures and recovery. Its parameters are still unverified development estimates, clearly labeled in the UI. The body now renders nine interactive 3D regions with health colors, injury markers, comparison and a selectable 2D fallback. All workstreams are now implemented together in this workspace.
+The forecast engine now implements loss, injury, countermeasures and recovery. A generic bone-rate anchor is now tied to a cited range; other coefficients remain explicitly classified development assumptions. Open Science & limits for offline source summaries. The body now renders nine interactive 3D regions with health colors, injury markers, comparison and a selectable 2D fallback. All workstreams are now implemented together in this workspace.
 
 ## Setup on another developer's Windows computer
 
@@ -56,6 +56,10 @@ Before distributing, install on a second clean Windows machine, disconnect inter
 Enable **Compare plans**, then select **Current plan** or **New plan** to edit their controls independently. **Copy current plan** starts an identical alternative; **Reset plans** restores the demo defaults. Four charts show both forecasts and their illustrative uncertainty ranges, with a shared day cursor and landing marker.
 
 Use **Play/Pause** and **1x/4x/16x** to advance the timeline. **Run demo** presents six stages from baseline through injury, comparison, recovery and the Mars scenario. Any manual interaction stops the guided demo. The destination remains a scenario label rather than a new gravity model.
+
+## Science and provenance
+
+**Science & limits** in the app shows the evidence classifications, limitations and bundled source summaries. The four crew presets are fictional. Read [docs/science.md](docs/science.md) for numeric settings and sources, and [docs/validation.md](docs/validation.md) for consistency results. Run `.venv\Scripts\python.exe docs/validate.py` to regenerate that report. These checks are not independent validation against astronaut outcomes.
 
 ## Checks
 

@@ -1,6 +1,6 @@
 # Development forecast engine
 
-This implements the build plan's deterministic equations using the existing parameter file. The rates, recovery times, injury multipliers, personal factors and risk thresholds are still **uncited development estimates**. They have not been calibrated or clinically validated. A working calculation is not a validated health prediction.
+This implements the build plan's deterministic equations using the existing parameter file. The shared hip/spine base rate now uses an explicitly chosen midpoint from a broad NASA range, with the compound daily conversion recorded in docs/science.md. This is a generic anchor, not site-specific calibration. Recovery times, injury multipliers, personal factors, other loss rates and risk thresholds remain development assumptions. The model has not been clinically validated. See data/evidence.json for parameter-by-parameter provenance.
 
 - All percentage curves start at the person's own preflight baseline of 100, with one sample per day through landing plus 90 days.
 - Flight intervals end on days 1 through landing; the first recovery interval ends on landing plus 1.
