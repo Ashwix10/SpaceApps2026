@@ -5,8 +5,8 @@ export const theme = {
   font: 'Inter, ui-sans-serif, system-ui, sans-serif',
 } as const;
 export const chart = {
-  current: '#4FD1FF', alternative: '#B794F6', grid: '#1C2740', axis: '#6B7A96',
-  nasa: '#FFFFFF', challenge: '#FB923C', tooltip: '#0F1626',
+  current: '#5FD8FF', alternative: '#FFC65A', grid: '#1A1A1A', axis: '#5C5C5C',
+  nasa: '#FFFFFF', challenge: '#FF8A65', tooltip: '#0A0A0A',
 } as const;
 // Named exports make the shared tokens convenient for Person 3.
 export const { bg, panel, border, text, muted, accent, healthy, warning, danger } = theme;

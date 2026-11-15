@@ -44,7 +44,7 @@ export function ForecastCharts({ forecast, comparison, day, selected }: {
         </defs>
         <CartesianGrid stroke={chart.grid} vertical={false} /><XAxis dataKey="day" type="number" domain={[0, forecast.days.length - 1]} minTickGap={35} stroke={chart.axis} tick={{ fontSize: 10 }} />
         <YAxis domain={[floor, 101]} allowDataOverflow stroke={chart.axis} tick={{ fontSize: 10 }} tickCount={5} tickFormatter={v => `${Math.round(v)}%`} />
-        <Tooltip contentStyle={{ background: chart.tooltip, borderColor: '#23304A', borderRadius: 10 }} labelFormatter={value => `Day ${value}`} />
+        <Tooltip contentStyle={{ background: chart.tooltip, borderColor: '#262626', borderRadius: 10 }} labelFormatter={value => `Day ${value}`} />
         <Legend />
         <Area dataKey="currentBand" fill={`url(#band-${key})`} stroke="none" legendType="none" tooltipType="none" isAnimationActive={false} />
         {comparison && <Area dataKey="alternativeBand" fill={chart.alternative} fillOpacity={0.1} stroke="none" legendType="none" tooltipType="none" isAnimationActive={false} />}

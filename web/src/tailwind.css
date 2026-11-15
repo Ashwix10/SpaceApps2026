@@ -1,0 +1,5 @@
+/* Tailwind v4 theme and utilities only. Preflight (the global reset) is left out on purpose:
+   it would restyle every existing page. Unlayered app CSS still wins over these layered utilities. */
+@layer theme, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);

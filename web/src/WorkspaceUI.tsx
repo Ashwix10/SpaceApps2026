@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { CrewProfile } from './types';
 import type { Flight, Workspace } from './workspace';
-import { DestinationVisual, Icon, OrbitalVisual, StaggerStyle } from './Visuals';
+import { DestinationVisual, Icon, StaggerStyle } from './Visuals';
+import { AstroHero } from './components/AstroHero';
 const destination = (flight: Flight) => flight.request.mission.destination === 'ISS' ? 'Space Station' : flight.request.mission.destination === 'MOON' ? 'Moon' : 'Mars';
 const initials = (name: string) => name.split(/\s+/).map(n=>n[0]).slice(0,2).join('').toUpperCase();
 const date = (value: string) => new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(new Date(value));
@@ -16,8 +17,7 @@ export function WorkspaceHome({ workspace, ready, onCreate, onOpen, onRename, on
   const latest = [...active].sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt))[0];
   const flights = workspace.flights.filter(f=>f.archived === archived && `${f.name} ${f.request.crew.name}`.toLowerCase().includes(query.toLowerCase())).sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt));
   return <>
-    <header className="workspace-intro"><div><p className="section-number"><span className="accent-dot"/> MISSION CONTROL</p><h1 id="page-heading" tabIndex={-1}>Forecast the body.<br/><span>Before you decide.</span></h1><p>A digital twin of each astronaut: bone, muscle and fitness, day by day, calibrated to NASA astronaut data.</p></div><span className="workspace-edition">ASTROTWIN <span>/</span> DIGITAL TWIN</span></header>
-    <section className="mission-hero" aria-label="Start exploring"><div className="mission-hero-copy"><span className="hero-eyebrow"><span/> FLIGHT SURGEON WORKSPACE</span><h2>Day 40. A sprained ankle.<br/><span className="hero-gradient">Which plan gets them home fit?</span></h2><p>Enter the injury, compare two countermeasure plans and see bone, muscle and cardio fitness through landing, anchored to measurements from 17 ISS astronauts in NASA’s Sprint study.</p><button className="button button-light" disabled={!ready} onClick={onCreate}>Create a flight <Icon name="plus"/></button><div className="hero-bottom-note"><Icon name="shield" size={14}/> Calibrated to NASA astronaut data</div></div><OrbitalVisual/></section>
+    <AstroHero ready={ready} onCreate={onCreate}/>
     <div className="workspace-summary"><div><span className="summary-icon"><Icon name="orbit"/></span><div><span>Active flights</span><strong>{String(active.length).padStart(2,'0')}<small>ready to explore</small></strong></div></div><button onClick={onDirectory}><span className="summary-icon"><Icon name="astronauts"/></span><div><span>Astronaut profiles</span><strong>{String(workspace.astronauts.length).padStart(2,'0')}<small>meet your crew <Icon name="arrow" size={13}/></small></strong></div></button><div className="summary-evidence"><span className="summary-icon"><Icon name="research"/></span><div><span>Evidence, always visible</span><a href="#/research">Calibrated to NASA data <Icon name="arrow" size={15}/></a><small>Research prototype · Not for clinical use</small></div></div></div>
     {latest && <button className="resume-flight" onClick={()=>onOpen(latest.id)}><DestinationVisual destination={latest.request.mission.destination}/><div><span className="section-number">PICK UP WHERE YOU LEFT OFF</span><h2>{latest.name}</h2><p>{destination(latest)} <span>·</span> {latest.request.mission.duration_days} days <span>·</span> {latest.request.crew.name}</p></div><span className="resume-action">Continue flight <Icon name="arrow"/></span></button>}
     <div className="collection-heading"><div><span className="section-number">YOUR COLLECTION</span><h2>Flight library<span>{active.length.toString().padStart(2,'0')}</span></h2></div><button className="quiet-link" disabled={!ready} onClick={onCreate}><Icon name="plus" size={16}/> New flight</button></div>
