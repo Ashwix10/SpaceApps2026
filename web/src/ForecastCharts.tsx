@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Area, CartesianGrid, ComposedChart, ErrorBar, Legend, Line, ReferenceLine, ResponsiveContainer, Scatter, Tooltip, XAxis, YAxis } from 'recharts';
 import sprint from '../../data/research/sprint_control.json';
 import moore from '../../data/research/moore_2014_vo2.json';
@@ -18,11 +19,18 @@ const sprintPoints = Object.fromEntries(sprint.outcomes.map(o => [`${o.key}_pct`
 export function ForecastCharts({ forecast, comparison, day, selected }: {
   forecast: ForecastResponse; comparison: CompareResponse | null; day: number; selected: RegionId | null;
 }) {
+  // Let the page paint first; the four charts are built a moment later.
+  const [ready, setReady] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setReady(true), 120); return () => clearTimeout(t); }, []);
+  if (!ready) return <p className="chart-loading" role="status">Drawing the charts…</p>;
   return <div className="forecast-charts">{(Object.entries(tissueLabels) as [SeriesKey, string][]).map(([key, label]) => {
     const point = sprintPoints[key];
     const nasaDay = point ? Math.min(forecast.landing_day + point.offset, forecast.days.length - 1) : -1;
     const mooreDay = key === moore.series && moore.day <= forecast.landing_day ? moore.day : -1;
-    const rows = forecast.days.map((d, i) => ({ day: d, current: forecast.series[key][i],
+    // Plot about 120 points per chart (always keeping landing, the NASA points and the last day) to keep rendering fast.
+    const step = Math.max(1, Math.ceil(forecast.days.length / 120));
+    const keep = (i: number) => i % step === 0 || i === forecast.landing_day || i === nasaDay || i === mooreDay || i === forecast.days.length - 1;
+    const rows = forecast.days.filter((_, i) => keep(i)).map(i => ({ day: i, current: forecast.series[key][i],
       currentBand: [forecast.bands[key].low[i], forecast.bands[key].high[i]],
       alternative: comparison?.alternative.series[key][i],
       alternativeBand: comparison ? [comparison.alternative.bands[key].low[i], comparison.alternative.bands[key].high[i]] : undefined,

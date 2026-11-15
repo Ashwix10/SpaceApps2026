@@ -8,6 +8,8 @@ import { SciencePanel } from './SciencePanel';
 import { comparisonSummary, landingDeltas } from './comparison';
 import { MissionSettings } from './MissionSettings';
 import { PlanPeaks } from './components/PlanPeaks';
+import { prewarmPeakChart } from '@/components/ui/peak-chart';
+import { PageErrorBoundary } from './components/PageErrorBoundary';
 import { useWorkspace } from './useWorkspace';
 import { archiveFlight, createFlight, updateFlight } from './workspace';
 import { AstronautDirectory, FlightForm, ProfileDetails, ProfileForm, WorkspaceDialog, WorkspaceHome } from './WorkspaceUI';
@@ -83,6 +85,7 @@ export function App() {
     return () => window.removeEventListener('hashchange', change);
   }, []);
   useEffect(() => { document.title = `${titles[page]} — AstroTwin`; }, [page]);
+  useEffect(() => { prewarmPeakChart(); }, []);
   useEffect(() => {
     let active = true;
     setBusy(true); setError('');
@@ -137,7 +140,7 @@ export function App() {
     <a className="skip-link" href="#main-content" onClick={e=>{e.preventDefault();document.querySelector<HTMLElement>('main h1')?.focus();}}>Skip to content</a>
     <header className="workbench-header"><div><a href={pageHref('home')}>Workspace</a><span>/</span>{activeFlight && ['mission','explore','compare'].includes(page) && <><strong>{activeFlight.name}</strong><span>/</span></>}<strong>{page==='home' ? 'Overview' : titles[page]}</strong></div><span className="save-state"><i/>{storageError ? 'Not saved' : 'Saved locally'}</span></header>
     {storageError && <div className="storage-notice" role="alert">{storageError}</div>}
-    <AnimatePresence mode="wait" initial={false}><PageFrame key={page} page={page}>
+    <PageErrorBoundary key={page}><AnimatePresence mode="wait" initial={false}><PageFrame key={page} page={page}>
       {page === 'home' && <>{connectionError}<WorkspaceHome workspace={workspace} ready={ready} onCreate={()=>setDialog({kind:'new-flight'})} onOpen={openFlight} onRename={id=>setDialog({kind:'rename-flight',id})} onArchive={(id,archived)=>setWorkspace(previous=>archiveFlight(previous,id,archived))} onDirectory={()=>{location.hash=pageHref('astronauts');}}/></>}
       {page === 'astronauts' && <>{connectionError}<AstronautDirectory astronauts={crew} flights={workspace.flights} ready={ready} onCreate={()=>setDialog({kind:'new-profile'})} onSelect={id=>setDialog({kind:'profile',id})}/></>}
       {page === 'mission' && <><Intro number="01" title="Flight setup." aside={<span className="quiet-tag">Your starting point</span>}>Choose the flight details and daily routine.</Intro>{connectionError}
@@ -159,7 +162,7 @@ export function App() {
           <div className="page-actions"><p>{scope || 'Same mission and crew. Exercise is a scenario, not a prescription.'}</p><a className="quiet-link" href={pageHref('research')}>See what supports the estimates <Arrow/></a></div></> : !input ? noFlight : !error && <Loading/>}
       </>}
       {page === 'research' && <><Intro number="04" title="Research & sources." aside={<span className="quiet-tag">Sources, not promises</span>}>What is measured. What is modeled. What is still unknown.</Intro><div className="research-layout"><aside className="research-aside"><span className="section-number">OUR APPROACH</span><h2>Keep the evidence visible.</h2><p>Four loss rates are fitted to NASA’s Sprint study of 17 ISS astronauts. Exercise and medication effects are checked for direction against NASA countermeasure studies; their sizes are still assumed.</p><div className="research-note"><span className="live-dot"/><span>Independent project.<br/>No NASA endorsement implied.</span></div></aside><div className="research-content"><SciencePanel activeParamsVersion={health?.params_version}/><details className="asset-credit"><summary>About the human model</summary><p>The reference body uses MakeHuman’s CC0 base mesh, adapted for local rendering. It is a generic illustration, not an astronaut scan or a clinical reconstruction.</p><a href="https://github.com/makehumancommunity/makehuman/blob/master/LICENSE.md" target="_blank" rel="noopener noreferrer">MakeHuman source & license ↗</a></details></div></div></>}
-    </PageFrame></AnimatePresence>
+    </PageFrame></AnimatePresence></PageErrorBoundary>
     {dialog && <WorkspaceDialog title={dialog.kind==='new-flight' ? 'New flight' : dialog.kind==='rename-flight' ? 'Rename flight' : dialog.kind==='new-profile' ? 'Add astronaut' : dialog.kind==='edit-profile' ? 'Edit astronaut' : 'Astronaut profile'} onClose={()=>setDialog(null)}>
       {(dialog.kind==='new-flight' || dialog.kind==='rename-flight') && <FlightForm astronauts={crew} initial={dialog.kind==='rename-flight' ? dialogFlight : undefined} preferredCrewId={dialog.crewId} onSave={(name,crewId)=>{
         if(dialog.kind==='rename-flight' && dialogFlight){setWorkspace(previous=>updateFlight(previous,dialogFlight.id,{name}));setDialog(null);return;}

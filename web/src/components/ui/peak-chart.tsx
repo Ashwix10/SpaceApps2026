@@ -2,7 +2,8 @@
 
 // Peak Chart by Louis Studios.
 // 200 more hand-made React components at https://studios.lou15.com/?ref=21st-code
-// AstroTwin change: optional `domain` prop so several cards can share one vertical scale.
+// AstroTwin changes: optional `domain` prop so several cards can share one vertical scale; the glow field is
+// painted once at a fixed resolution and cached (it was rebuilt per card at screen resolution and froze the page).
 
 import * as React from "react"
 
@@ -259,6 +260,21 @@ function buildField(px: number, seed: number) {
   c1.putImageData(i1, 0, 0)
   c2.putImageData(i2, 0, 0)
   return { rest, lift }
+}
+
+/** The glow is soft, so one fixed-resolution copy, shared by every card and visit, is enough. */
+const FIELD_PX = 420
+let fieldCache: { rest: HTMLCanvasElement; lift: HTMLCanvasElement } | null = null
+function cachedField() {
+  if (!fieldCache) fieldCache = buildField(FIELD_PX, 11)
+  return fieldCache
+}
+/** Paint the shared glow ahead of time, when the browser is idle, so the first card appears without a pause. */
+export function prewarmPeakChart() {
+  if (typeof window === "undefined" || fieldCache) return
+  const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback
+  if (idle) idle(() => cachedField(), { timeout: 4000 })
+  else setTimeout(() => cachedField(), 1500)
 }
 
 /** Soft blue light that spills from behind the card onto the backdrop. */
@@ -566,8 +582,7 @@ export function PeakChart({
     canvas.style.top = `${-byc}px`
     canvas.style.width = `${canvas.width / dpr}px`
     canvas.style.height = `${canvas.height / dpr}px`
-    const fieldPx = Math.min(width * dpr, Math.max(width, 700))
-    const { rest: field, lift: bright } = buildField(fieldPx, 11)
+    const { rest: field, lift: bright } = cachedField()
     const grid = buildGrid(width * dpr)
     const halo = buildHalo(width)
     const tLand = (frac: number) => T_DRAW0 + T_DRAW * inverseEase(frac)

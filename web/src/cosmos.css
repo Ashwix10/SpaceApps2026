@@ -126,3 +126,4 @@ body{background:var(--bg);color:var(--text)}
 .workspace-shell .plan-peaks-heading h2{font-weight:300;font-size:24px;margin:10px 0 6px}
 .workspace-shell .plan-peaks-heading p{color:var(--muted);font-size:12px;max-width:640px}
 .workspace-shell .plan-peaks-cards{display:flex;justify-content:center;align-items:center;gap:72px;padding:56px 0 40px;overflow:hidden}
+.workspace-shell .chart-loading{padding:40px 0;text-align:center;color:var(--muted);font-size:12px}
