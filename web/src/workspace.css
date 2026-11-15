@@ -234,3 +234,19 @@
 @media(max-width:620px){.spacecraft-focus{width:100%;padding-top:53px;margin:0}.workspace-planet{width:213px;right:-42px;top:2px}.distant-mars{left:4%;top:95px;width:32px}.distant-saturn{left:7%;top:305px;width:46px}.spacecraft-readout{width:calc(100% - 24px);margin:-8px 0 12px auto;padding:10px 13px}.spacecraft-readout h2{font-size:14px}.spacecraft-readout dl{gap:10px 15px}.spacecraft-readout dd{font-size:11px}.flight-objects{grid-template-columns:repeat(2,minmax(0,1fr));padding-top:24px}.orbit-empty{padding:24px 0 60px}.orbit-workspace{min-height:570px}.profile-range-grid{gap:12px}.profile-slider{padding:11px 10px 7px}.profile-slider-heading{display:block}.profile-slider-heading>span{font-size:11px;min-height:30px;align-items:flex-start}.profile-slider-heading>span>svg{width:15px;height:15px}.profile-slider-heading output{display:flex;align-items:baseline;gap:5px;text-align:left;font-size:18px;margin-top:5px}.profile-slider-heading output small{display:inline;margin:0;font-size:9px}.profile-exact-grid{gap:0 12px}.profile-body-ranges{padding-bottom:16px;margin-bottom:16px}}
 @media(prefers-reduced-motion:reduce){.spacecraft-visual,.workspace-planet{animation:none}}
 @media(max-width:620px){.orbit-workspace{margin-right:0;padding-right:0;overflow-clip-margin:0}}
+
+/* Real photographs replace the drawn planets; the 3D NASA Moon replaces the drawn spacecraft. */
+.orbit-planet-moon,.orbit-planet-mars,.orbit-planet-iss,.orbit-planet-earth{overflow:hidden;background:#000}
+.orbit-planet>img{object-fit:cover}
+.orbit-planet-moon>img{transform:scale(1.22)}
+.orbit-planet-iss>img,.orbit-planet-earth>img{transform:scale(1.13)}
+/* Keeps the space the drawn spacecraft used, so the flight readout stays where it was. */
+.scene-spacer{width:100%;aspect-ratio:800/560}
+
+/* Earth hangs directly under the "Find a flight" search box at every screen size. */
+.search-anchor{position:relative}
+.search-earth{--earth:355px;position:absolute;top:calc(100% + 32px);left:calc(50% - var(--earth) / 2);width:var(--earth);aspect-ratio:1;opacity:.9;pointer-events:none;z-index:0}
+@media(min-width:1600px){.search-earth{--earth:400px}}
+@media(max-width:1150px){.search-earth{--earth:300px}}
+@media(max-width:950px){.search-earth{--earth:285px}}
+@media(max-width:620px){.search-earth{--earth:213px}}
