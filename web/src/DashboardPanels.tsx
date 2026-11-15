@@ -11,6 +11,7 @@ export function PlanControls({ value, baseline, name, onChange }: {
     { label: 'No exercise', minutes: 0, detail: '0 minutes a day' },
     { label: 'Short routine', minutes: 30, detail: '1 hour a day' },
     { label: 'Full routine', minutes: 60, detail: '2 hours a day' },
+    { label: 'Extended routine', minutes: 90, detail: '3 hours a day' },
   ];
   const matched = choices.some(c => value.resistance_min_per_day === c.minutes && value.aerobic_min_per_day === c.minutes);
   return <div className="plan-controls">
