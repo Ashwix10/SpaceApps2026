@@ -2,8 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { CrewProfile } from './types';
 import type { Flight, Workspace } from './workspace';
-import { Avatar, CrewPicker, crewPortraitIndex, DestinationVisual, Icon, OrbitPlanet } from './Visuals';
-import Globe from '@/components/ui/globe';
+import { Avatar, CrewPicker, crewPortraitIndex, DestinationVisual, Icon, OrbitPlanet, SpacecraftVisual } from './Visuals';
 
 const destination = (flight: Flight) => flight.request.mission.destination === 'ISS' ? 'Space station' : flight.request.mission.destination === 'MOON' ? 'Moon' : 'Mars';
 const date = (value: string) => new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(new Date(value));
@@ -24,14 +23,14 @@ export function WorkspaceHome({ workspace, ready, onCreate, onOpen, onRename, on
     <div className="workspace-toolbar">
       <h1 id="page-heading" tabIndex={-1}>Flights <span>{active.length}</span></h1>
       <div className="workspace-tools">
-        <div className="search-anchor"><label className="flight-search"><Icon name="search" size={17}/><input type="search" aria-label="Search flights" placeholder="Find a flight" value={query} onChange={event => setQuery(event.target.value)}/></label><div className="search-earth" aria-hidden="true"><Globe/></div></div>
+        <label className="flight-search"><Icon name="search" size={17}/><input type="search" aria-label="Search flights" placeholder="Find a flight" value={query} onChange={event => setQuery(event.target.value)}/></label>
         <button className={`workspace-icon-button ${archived ? 'is-selected' : ''}`} aria-label={archived ? 'Show active flights' : 'Show archived flights'} aria-pressed={archived} data-tooltip={archived ? 'Active flights' : 'Archived flights'} onClick={() => setArchived(current => !current)}><Icon name={archived ? 'orbit' : 'archive'}/></button>
         {workspace.flights.length > 0 && <button className="button button-light new-flight-button" aria-label="New flight" disabled={!ready} onClick={onCreate}><Icon name="plus" size={18}/><span>New flight</span></button>}
       </div>
     </div>
     <div className={`orbit-workspace ${flights.length ? 'has-flights' : ''}`}>
-      <div className="workspace-orbit-art" aria-hidden="true"><div className="workspace-orbit-path orbit-path-one"/><div className="workspace-orbit-path orbit-path-two"/></div>
-      <div className="spacecraft-focus"><div className="scene-spacer" aria-hidden="true"/>{featured && <section className="spacecraft-readout" aria-label="Selected flight details"><h2>{featured.name}</h2><dl><div><dt className="sr-only">Crew</dt><dd><Avatar profile={featured.request.crew}/><span>{featured.request.crew.name}</span></dd></div><div><dt className="sr-only">Destination</dt><dd><Icon name={featured.request.mission.destination === 'ISS' ? 'station' : 'planet'} size={17}/>{destination(featured)}</dd></div><div><dt className="sr-only">Duration</dt><dd><Icon name="clock" size={16}/>{featured.request.mission.duration_days} days</dd></div></dl></section>}</div>
+      <div className="workspace-orbit-art" aria-hidden="true"><div className="workspace-orbit-path orbit-path-one"/><div className="workspace-orbit-path orbit-path-two"/><OrbitPlanet className="workspace-planet"/><OrbitPlanet destination="MARS" className="distant-planet distant-mars"/><OrbitPlanet destination="SATURN" className="distant-planet distant-saturn"/></div>
+      <div className="spacecraft-focus"><SpacecraftVisual/>{featured && <section className="spacecraft-readout" aria-label="Selected flight details"><h2>{featured.name}</h2><dl><div><dt className="sr-only">Crew</dt><dd><Avatar profile={featured.request.crew}/><span>{featured.request.crew.name}</span></dd></div><div><dt className="sr-only">Destination</dt><dd><Icon name={featured.request.mission.destination === 'ISS' ? 'station' : 'planet'} size={17}/>{destination(featured)}</dd></div><div><dt className="sr-only">Duration</dt><dd><Icon name="clock" size={16}/>{featured.request.mission.duration_days} days</dd></div></dl></section>}</div>
       {archived && <h2 className="archive-heading">Archived flights</h2>}
       {flights.length ? <div className="flight-objects" aria-label={archived ? 'Archived flights' : 'Flights'}>{flights.map(flight => <article className={`flight-object ${workspace.activeFlightId === flight.id ? 'is-current' : ''}`} key={flight.id}>
         <div className="flight-object-actions"><IconButton label={`Rename ${flight.name}`} icon="edit" onClick={() => onRename(flight.id)}/><IconButton label={flight.archived ? `Restore ${flight.name}` : `Archive ${flight.name}`} icon={flight.archived ? 'restore' : 'archive'} onClick={() => onArchive(flight.id, !flight.archived)}/></div>

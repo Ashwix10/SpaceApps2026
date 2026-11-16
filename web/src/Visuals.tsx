@@ -41,14 +41,11 @@ export function SpaceBackdrop() {
   return <div className="space-backdrop" aria-hidden="true"><div className="space-starfield"/><div className="space-horizon"/></div>;
 }
 
-/** Real photographs (credits in public/images/CREDITS.md). */
-const PLANET_PHOTOS: Record<string, string> = { iss: 'earth-apollo17.jpg', earth: 'earth-apollo17.jpg', moon: 'moon.jpg', mars: 'mars.jpg' };
-
 /** Decorative destination artwork; it does not represent a flight's location. */
 export function OrbitPlanet({ destination = 'ISS', className = '' }: { destination?: string; className?: string }) {
   const kind = destination.toLowerCase();
   return <div className={`orbit-planet orbit-planet-${kind} ${className}`} aria-hidden="true">
-    {PLANET_PHOTOS[kind] ? <img src={`/images/${PLANET_PHOTOS[kind]}`} alt="" draggable={false} decoding="async"/> : <>{kind === 'saturn' && <span className="planet-rings"/>}<span className="planet-surface"/><span className="planet-terminator"/></>}
+    {kind === 'iss' || kind === 'earth' ? <img src="/images/earth.png" alt="" draggable={false} decoding="async"/> : <>{kind === 'saturn' && <span className="planet-rings"/>}<span className="planet-surface"/><span className="planet-terminator"/></>}
   </div>;
 }
 

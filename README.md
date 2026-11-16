@@ -2,6 +2,14 @@
 
 A browser-based astronaut health research prototype with an orbital workspace, visual crew and flight planning, interactive anatomy, measured research data, and a routine optimizer that evaluates the existing forecast model.
 
+## Project video
+
+[Watch or download the final AstroTwin video](docs/media/astrotwin-demo.mp4) · 30 seconds · 1920×1080 · 60 fps
+
+[![AstroTwin video](docs/media/astrotwin-demo-poster.png)](docs/media/astrotwin-demo.mp4)
+
+The video demonstrates flight planning, the 2D and 3D body views, NASA Sprint Study measurements, model forecasts and routine comparison. Music: Tycho — Awake. The AI watermark is included in the video.
+
 ## Open the web app
 
 From CMD in the repository folder:
