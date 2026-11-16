@@ -2,6 +2,8 @@
 
 A browser-based astronaut health research prototype with an orbital workspace, visual crew and flight planning, interactive anatomy, measured research data, and a routine optimizer that evaluates the existing forecast model.
 
+[Open AstroTwin](https://astrotwin-eight.vercel.app) · Public website and forecast API hosted on Vercel
+
 ## Project video
 
 [Watch or download the final AstroTwin video](docs/media/astrotwin-demo.mp4) · 30 seconds · 1920×1080 · 60 fps
@@ -64,7 +66,19 @@ npm run dev:web
 
 Open http://localhost:5173. The body sandbox remains `?sandbox=body`.
 
-`npm run build:web` builds for the same-origin server. For a separately hosted API, build web/ directly with VITE_API_URL set to the complete API base ending in /api, and configure WEB_ORIGIN on the API. No cloud deployment has been performed by this conversion.
+`npm run build:web` builds for the same-origin server. For a separately hosted API, build web/ directly with VITE_API_URL set to the complete API base ending in /api, and configure WEB_ORIGIN on the API.
+
+## Vercel deployment
+
+`vercel.json` deploys the Vite frontend and FastAPI backend as two services under one domain. Requests to `/api/*` reach the Python service; the remaining routes serve the built frontend. The root `asgi.py` entry point uses Python 3.12 and the dependencies in `pyproject.toml` and `uv.lock`, including the local `model/` and `explain/` packages.
+
+From a checkout linked to the `astrotwin` Vercel project:
+
+```sh
+npx vercel@65.16.0 deploy --prod --build-env VITE_API_URL=/api --build-env VITE_USE_MOCKS=false
+```
+
+The production site is public and needs no login. No API keys or database are required. `.vercel/` and environment files remain outside Git. The commercial authoring files and video exports are excluded from deployment uploads.
 
 ## Checks and model notes
 
@@ -79,7 +93,7 @@ docker build -f api/Dockerfile -t astrotwin .
 docker run --rm -p 8000:8000 astrotwin
 ```
 
-The multi-stage recipe builds the renderer and serves UI/API together. The recipe is prepared for deployment, but its Docker build could not be run locally because the Docker engine is unavailable. No public deployment has been performed. See docs/RELEASE.md.
+The multi-stage recipe builds the renderer and serves UI/API together. Its Docker build could not be run locally because the Docker engine is unavailable. The public website uses Vercel Services instead. See docs/RELEASE.md for the container recipe.
 
 ## Earlier desktop work
 
