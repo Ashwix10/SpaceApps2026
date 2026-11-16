@@ -24,6 +24,7 @@ release/
 .backend-build/
 .backend-dist/
 .npm-cache/
+.vercel/
 
 # Env and editors
 .env

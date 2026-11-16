@@ -1,0 +1,28 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "frontend": {
+      "root": "web",
+      "framework": "vite",
+      "installCommand": "npm ci",
+      "buildCommand": "npm run build",
+      "outputDirectory": "dist"
+    },
+    "backend": {
+      "root": ".",
+      "framework": "fastapi",
+      "entrypoint": "asgi:app",
+      "buildCommand": "python -c \"import astrotwin_model, astrotwin_explain\"",
+      "functions": {
+        "asgi.py": {
+          "maxDuration": 60,
+          "excludeFiles": "{web/**,desktop/**,astrotwin-commercial/**,docs/**,design-backups/**,scripts/**,node_modules/**,.venv/**,**/tests/**,**/__pycache__/**}"
+        }
+      }
+    }
+  },
+  "rewrites": [
+    { "source": "/api/:path*", "destination": { "service": "backend" } },
+    { "source": "/:path*", "destination": { "service": "frontend" } }
+  ]
+}
